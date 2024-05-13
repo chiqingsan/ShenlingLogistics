@@ -3,6 +3,54 @@
     {
       "name": "start_window_background",
       "value": "#FFFFFF"
+    },
+    {
+      "name": "primaryColor",
+      "value": "#EF4F3F"
+    },
+    {
+      "name": "successColor",
+      "value": "#27BA9B"
+    },
+    {
+      "name": "warningColor",
+      "value": "#E19A30"
+    },
+    {
+      "name": "errorColor",
+      "value": "#FF4C4C"
+    },
+    {
+      "name": "majorCharacters",
+      "value": "#2A2929"
+    },
+    {
+      "name": "nextCharacters",
+      "value": "#818181"
+    },
+    {
+      "name": "placeholderText",
+      "value": "#C2C1C1"
+    },
+    {
+      "name": "formBorderColor",
+      "value": "#D9D9D9"
+    },
+    {
+      "name": "dividingTheAreaBorderColor",
+      "value": "#EEEEEE"
+    },
+    {
+      "name": "backgroundColor",
+      "value": "#F4F4F4"
+    },
+    {
+      "name": "black",
+      "value": "#000000"
+    },
+    {
+      "name": "white",
+      "value": "#ffffff"
     }
   ]
 }
