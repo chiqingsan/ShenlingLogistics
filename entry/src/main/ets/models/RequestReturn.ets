@@ -2,7 +2,7 @@ export interface returnsData<T> {
   /**
    * 状态编码：200-成功，非200 -> 失败
    */
-  code: string;
+  code: number;
   /**
    * 提示信息
    */

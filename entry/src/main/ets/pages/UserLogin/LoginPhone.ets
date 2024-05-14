@@ -1,9 +1,22 @@
 import { router } from '@kit.ArkUI'
 
+
+const checkTheRegex:RegExp = /^1[3456789]\d{9}$/
+
 @Entry
 @Component
 struct LoginPhone {
-  @State logInOrSignUp:boolean = false
+  @State phoneNum:string = ''
+  @State captcha:string = ''
+  // 控制输入框变色的状态
+  @State enterTheStatus:boolean = true
+  // 倒计时
+  @State countdown:number = 60
+  // 验证图片的二进制
+  @State ImageShow:boolean = false
+  //key验证码刷新
+  @State ImgKey:number = 0
+  timerId:number = -1
 
   build() {
      Column(){
@@ -41,47 +54,99 @@ struct LoginPhone {
        }.width("100%").alignItems(VerticalAlign.Bottom)
 
        Column({space:18}){
-         TextInput({
-           placeholder:"请输入手机号"
-         })
-           .height(44)
-           .backgroundColor("#00000000")
-           .padding({top:0,bottom:20,left:0,right:0})
-           .border({
-             width:{bottom:1},
-             color:"#F7F7F7",
-             radius:0
-           })
-
-         Stack(){
+         Column({space:5}){
            TextInput({
-             placeholder:"请输入验证码"
+             placeholder:"请输入手机号",
+             text:this.phoneNum
            })
+             .maxLength(11)
+             .type(InputType.Number)
              .height(44)
              .backgroundColor("#00000000")
              .padding({top:0,bottom:20,left:0,right:0})
              .border({
                width:{bottom:1},
-               color:"#F7F7F7",
+               color:this.enterTheStatus?  "#F7F7F7" : "#EF4F3F",
                radius:0
              })
-           Row(){
-             Divider()
-               .vertical(true)
-               .height(26)
-               .strokeWidth(1)
-               .color("#F4F4F4")
+             .onChange( (val) => {
+               this.phoneNum = val
+               if (val.length === 11) {
+                 if (!checkTheRegex.test(val)) {
+                   this.enterTheStatus = false
+                 }
+               }else {
+                 this.enterTheStatus = true
+               }
+             })
+           Text("手机号输入有误! 请重新输入")
+             .fontColor("#EF4F3F")
+             .width("100%")
+             .fontSize(14)
+             .visibility(this.enterTheStatus?  Visibility.Hidden : Visibility.Visible)
 
-             Text("获取验证码")
-               .fontSize(14)
-               .fontColor("#2A2929")
-               .margin({left:15,top:3,bottom:3,right:10})
-           }
-            .margin({bottom:20})
          }
-          .alignContent(Alignment.End)
+
+         Column({space:5}){
+           Stack(){
+             TextInput({
+               placeholder:"请输入验证码",
+               text:this.captcha
+             })
+               .maxLength(6)
+               .type(InputType.Number)
+               .height(44)
+               .backgroundColor("#00000000")
+               .padding({top:0,bottom:20,left:0,right:0})
+               .border({
+                 width:{bottom:1},
+                 color:"#F7F7F7",
+                 radius:0
+               })
+             Row(){
+               Divider()
+                 .vertical(true)
+                 .height(26)
+                 .strokeWidth(1)
+                 .color("#F4F4F4")
+
+               Text(this.countdown < 60 ?`${this.countdown}s后重新获取`:"获取验证码")
+                 .fontSize(14)
+                 .fontColor(this.countdown < 60 ? "#818181": "#2A2929")
+                 .margin({left:15,top:3,bottom:3,right:10})
+             }
+             .enabled(this.countdown === 60)
+             .margin({bottom:20})
+             .onClick(async () => {
+               clearInterval(this.timerId)
+               this.ImgKey = Date.now()
+               this.ImageShow = true
+               this.countdown--
+               this.timerId = setInterval( () => {
+                 this.countdown--
+                 if (this.countdown <= 0) {
+                   this.countdown = 60
+                   clearInterval(this.timerId)
+                 }
+               },1000)
+             })
+           }
+           .alignContent(Alignment.End)
+
+           Text("验证码输入有误! 请重新输入")
+             .fontColor("#EF4F3F")
+             .width("100%")
+             .fontSize(14)
+             .visibility(Visibility.Hidden)
+           if (this.ImageShow){
+             Image(`https://slwl-api.itheima.net/driver/register/captcha/?key=${this.ImgKey.toString()}`)
+               .width("100%")
+           }
+         }
        }
        .margin({top:45,bottom:50})
+
+
 
        Button("登录")
          .backgroundColor("#EF4F3F")

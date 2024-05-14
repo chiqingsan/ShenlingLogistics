@@ -1,9 +1,23 @@
 import { router } from '@kit.ArkUI'
+import { MyHttp } from '../../common/utils/Request'
+import { http } from '@kit.NetworkKit';
 
+
+export interface userAccountSecrets {
+  /**
+   * 登录账号
+   */
+  account: string;
+  /**
+   * 登录密码
+   */
+  password: string;
+}
 @Entry
 @Component
 struct LoginPassword {
-  @State logInOrSignUp:boolean = false
+  @State userAccount:string = "xbsj001"
+  @State userPassword:string = "123456"
 
   build() {
     Column(){
@@ -41,7 +55,8 @@ struct LoginPassword {
 
       Column({space:18}){
         TextInput({
-          placeholder:"请输入账号"
+          placeholder:"请输入账号",
+          text:$$this.userAccount
         })
           .height(44)
           .backgroundColor("#00000000")
@@ -53,7 +68,8 @@ struct LoginPassword {
           })
 
           TextInput({
-            placeholder:"请输入密码"
+            placeholder:"请输入密码",
+            text:$$this.userPassword
           })
             .height(44)
             .backgroundColor("#00000000")
@@ -78,6 +94,21 @@ struct LoginPassword {
         .fontWeight(400)
         .width("100%")
         .height(50)
+        .onClick(async () => {
+          const res = await MyHttp.post<string>("/driver/login/account",{
+            account:this.userAccount,
+            password:this.userPassword
+          } as userAccountSecrets)
+
+          console.log("res:",JSON.stringify(res))
+          if (res.code === 200) {
+            AppStorage.setOrCreate("Token",res.data)
+            router.replaceUrl({
+              url:"pages/Index"
+            })
+            router.clear()
+          }
+        })
     }
     .width("100%")
     .height("100%")

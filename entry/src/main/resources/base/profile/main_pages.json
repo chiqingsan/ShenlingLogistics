@@ -2,6 +2,9 @@
   "src": [
     "pages/Index",
     "pages/UserLogin/LoginPhone",
-    "pages/UserLogin/LoginPassword"
+    "pages/UserLogin/LoginPassword",
+    "pages/Message/Message",
+    "pages/Mine/Mine",
+    "pages/Task/Task"
   ]
 }

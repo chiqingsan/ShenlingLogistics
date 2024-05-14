@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="17px" viewBox="0 0 15 17" version="1.1">
+  <!-- Generator: Sketch 63 (92445) - https://sketch.com -->
+  <title>icon_sosuo</title>
+  <desc>Created with Sketch.</desc>
+  <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g id="列表页-通用下拉刷新动效示意" transform="translate(-25.000000, -98.000000)">
+      <g id="编组-3" transform="translate(25.000000, 97.000000)">
+        <g id="搜索-黑" transform="translate(0.000000, 0.930734)">
+          <circle id="椭圆形" stroke="#2A2929" stroke-width="1.5" cx="7" cy="8" r="6"></circle>
+          <line x1="11.3026153" y1="12.7709188" x2="13.4312524" y2="15.1385317" id="路径-2" stroke="#2A2929" stroke-width="1.5" stroke-linecap="round"></line>
+          <rect id="矩形" x="1" y="2" width="12.4312524" height="13.1385317"></rect>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

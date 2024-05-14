@@ -3,9 +3,9 @@ import { promptAction, router } from '@kit.ArkUI'
 import { returnsData } from '../../models/RequestReturn'
 
 // 项目请求的基地址
-const baseUrl: string = "https://api-harmony-teach.itheima.net/hm/"
+const baseUrl: string = "https://slwl-api.itheima.net"
 
-export class HdHttp {
+export class MyHttp {
   // 封装 get 请求方法
   static async get<T>(url: string, query?: object, isJSON: boolean = false) {
 
@@ -71,7 +71,6 @@ export class HdHttp {
       // 创建请求对象
       const httpRequest = http.createHttp()
 
-
       const options: http.HttpRequestOptions = {
         method: http.RequestMethod.POST,
         header: {
@@ -92,6 +91,7 @@ export class HdHttp {
       // }
 
       const res = await httpRequest.request(baseUrl + url, options)
+      console.log("request res: ",JSON.stringify(res))
 
       const resData = res.result as returnsData<T>
       // Logger.info("resDate_Post:", JSON.stringify(resData))
@@ -123,7 +123,7 @@ export class HdHttp {
       promptAction.showToast({
         message: "Post请求出错误"
       })
-      // Logger.error("Post", JSON.stringify(err))
+      console.error("Post", JSON.stringify(err))
 
       return Promise.reject(err)
     }
