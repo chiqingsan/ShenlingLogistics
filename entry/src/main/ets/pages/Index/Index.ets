@@ -26,7 +26,8 @@ struct Index {
   @State
   currentName: string = "task"
 
-  @Builder // 可以直接写ArkUI
+  @Builder
+  // 可以直接写ArkUI
   getTabBar(item: TabClass) {
     Column() {
       Image(item.icon)
@@ -61,9 +62,10 @@ struct Index {
       })
     }
     // 无法调整tabbar的对齐方式
-    .onChange(index => {
+    .onTabBarClick(index => {
       this.currentName = this.tabsData[index].name
     })
     .animationDuration(300)
+    .scrollable(false)
   }
 }

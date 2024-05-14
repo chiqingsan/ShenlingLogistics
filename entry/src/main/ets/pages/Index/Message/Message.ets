@@ -1,6 +1,7 @@
 import { HmNavBar } from 'shenling_common'
 import MessageTemplate from './MessageTemplate'
 import { TabClass } from '../../../models'
+
 @Component
 struct Message {
   @State currentTabName: string = 'information'
@@ -11,6 +12,7 @@ struct Message {
     title: '任务通知',
     name: 'notice'
   }]
+
   @Builder
   TabBuilder(item: TabClass) {
     Column() {
@@ -48,7 +50,10 @@ struct Message {
             }.height('100%').backgroundColor($r('app.color.background_page'))
           }.tabBar(this.TabBuilder(item))
         })
-      }.animationDuration(300).onChange((index) => {
+      }
+      .scrollable(false)
+      .animationDuration(300)
+      .onTabBarClick((index) => {
         this.currentTabName = index === 0 ? 'information' : 'notice'
       })
     }.width('100%').height('100%')

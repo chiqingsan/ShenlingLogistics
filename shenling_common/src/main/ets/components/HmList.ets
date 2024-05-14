@@ -7,10 +7,6 @@ import { AVPlayerClass } from '../utils'
 struct HmList {
   @State
   loading: boolean = false // 控制上拉加载的并发
-  onLoad: () => void = () => {
-  } // 上拉加载的函数
-  onRefresh: () => void = () => {
-  } // 下拉刷新的函数
   @Prop
   finished: boolean // 当前是否已经查询完所有数据
   @Link
@@ -27,6 +23,10 @@ struct HmList {
   lazyDataSource: ListDataSource = new ListDataSource()
   @State
   refreshStatus: RefreshStatus = RefreshStatus.Inactive
+  onLoad: () => void = () => {
+  } // 上拉加载的函数
+  onRefresh: () => void = () => {
+  } // 下拉刷新的函数
 
   updateDataSource() {
     this.lazyDataSource.reloadData(this.dataSource)
@@ -46,6 +46,7 @@ struct HmList {
           Text(this.loadingText)
             .fontSize(14)
             .fontColor($r('app.color.text_secondary'))
+
           if (this.showLoadingIcon) {
             // 还没请求完，应该显示进度条的动画
             HmLoading({
@@ -102,16 +103,20 @@ struct HmList {
         LazyForEach(this.lazyDataSource, (item: object) => {
           ListItem() {
             // 可以放任何内容
-            if (this.renderItem) {
-              this.renderItem(item) // 渲染插槽内容
-            }
+            Column() {
+              if (this.renderItem) {
+                this.renderItem(item) // 渲染插槽内容
+              }
+            }.borderRadius(10)
           }
         })
         ListItem() {
           // 底部显示内容
           this.getBottomDisplay()
         }
-      }.onReachEnd(async () => {
+      }.height("100%")
+      .scrollBar(BarState.Off)
+      .onReachEnd(async () => {
         // 上拉加载
         if (!this.finished && !this.loading) {
           this.loading = true
