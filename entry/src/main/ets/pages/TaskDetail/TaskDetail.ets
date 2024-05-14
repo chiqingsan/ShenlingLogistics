@@ -16,6 +16,7 @@ import call from '@ohos.telephony.call'
 @Entry
 @Component
 struct TaskDetail {
+  @StorageProp("topHeight") topHeight: number = 0
   @State
   loadingText: string = "加载详情中"
   layer: CustomDialogController = new CustomDialogController({
@@ -417,6 +418,7 @@ struct TaskDetail {
   build() {
     Column() {
       HmNavBar({ title: '任务详情' })
+        .padding({ top: this.topHeight })
       Scroll(this.scroll) {
         // Scroll里面只能有一个组件
         Column() {
@@ -467,7 +469,8 @@ struct TaskDetail {
         // 只有在非完成情况下 才显示底部按钮
         this.getBottomBtn()
       }
-    }.backgroundColor($r('app.color.background_page'))
+    }
+    .backgroundColor($r('app.color.background_page'))
     .height('100%')
   }
 }

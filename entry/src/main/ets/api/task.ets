@@ -3,6 +3,7 @@ import {ExceptionParamsTypeModel, DelayParamsTypeModel, DeliverParamsTypeModel, 
 
 // 类型传值时 既可以用interface 也可以用class
 export const getTaskList = (params: TaskListParamsModel) => {
+  console.log("getTaskList:",)
   return Request.get<TaskListDataModel>("/tasks/list", params)
 }
 // 获取任务详情的接口

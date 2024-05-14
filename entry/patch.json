@@ -1,0 +1,11 @@
+{
+  "app": {
+    "bundleName": "com.itheima.shenling2",
+    "patchVersionCode": 2000061,
+    "versionCode": 1000000
+  },
+  "module": {
+    "name": "entry",
+    "type": "hotreload"
+  }
+}

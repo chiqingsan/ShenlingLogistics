@@ -3,8 +3,9 @@ import { TabClass } from '../../models'
 import My from './My/My'
 import TaskTabs from './Task/TaskTabs'
 import Message from './Message/Message'
+import { windowManager } from '../../common/utils/WindowManager'
 
-PersistentStorage.PersistProp(TOKEN_KEY, "")
+PersistentStorage.persistProp(TOKEN_KEY, "")
 
 @Entry
 @Component
@@ -26,7 +27,8 @@ struct Index {
   @State
   currentName: string = "task"
 
-  @Builder // 可以直接写ArkUI
+  @Builder
+  // 可以直接写ArkUI
   getTabBar(item: TabClass) {
     Column() {
       Image(item.icon)
@@ -43,27 +45,36 @@ struct Index {
     }
   }
 
+  aboutToAppear(): void {
+    windowManager.enableFullScreen(true)
+  }
+
   build() {
-    Tabs({ barPosition: BarPosition.End }) {
-      ForEach(this.tabsData, (item: TabClass) => {
-        TabContent() {
-          if (item.name === 'task') {
-            TaskTabs()
+    Column() {
+      Tabs({ barPosition: BarPosition.End }) {
+        ForEach(this.tabsData, (item: TabClass) => {
+          TabContent() {
+            if (item.name === 'task') {
+              TaskTabs()
+            }
+            else if (item.name === 'message') {
+              Message()
+            }
+            else {
+              My()
+            }
           }
-          else if (item.name === 'message') {
-            Message()
-          }
-          else {
-            My()
-          }
-        }
-        .tabBar(this.getTabBar(item))
+          .tabBar(this.getTabBar(item))
+
+        })
+      }
+      // 无法调整tabbar的对齐方式
+      .onTabBarClick(index => {
+        this.currentName = this.tabsData[index].name
       })
+      .animationDuration(300)
+      .scrollable(false)
+      .padding({  bottom: 12 })
     }
-    // 无法调整tabbar的对齐方式
-    .onChange(index => {
-      this.currentName = this.tabsData[index].name
-    })
-    .animationDuration(300)
   }
 }

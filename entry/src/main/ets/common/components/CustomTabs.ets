@@ -8,8 +8,9 @@ interface TabItem {
 @Entry
 @Component
 export struct CustomTabs {
-  @State left: number = 16
+  // 小横条的长度
   yokojoWidth: number = 23
+  @State left: number = 16
   @Link index: number
   @State tabBuilderList: string[] = []
 
@@ -31,8 +32,7 @@ export struct CustomTabs {
             this.tabBuilder({
               name: item,
               value: index,
-              onAreaChange: index ? () => {
-              } : (area) => {
+              onAreaChange: (area) => {
                 this.setLineLeft(area)
               }
             })
@@ -75,6 +75,10 @@ export struct CustomTabs {
         this.setLineLeft(e.target.area)
         this.index = tab.value
       })
-      .onAreaChange((_o, n) => tab.onAreaChange && tab.onAreaChange(n))
+      .onAreaChange((_o, n) => {
+        if (this.index === tab.value) {
+          tab.onAreaChange && tab.onAreaChange(n)
+        }
+      })
   }
 }

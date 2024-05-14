@@ -1,6 +1,22 @@
 import { http } from '@kit.NetworkKit'
 import { promptAction, router } from '@kit.ArkUI'
-import { returnsData } from '../../models/RequestReturn'
+
+export interface returnsData<T> {
+  /**
+   * 状态编码：200-成功，非200 -> 失败
+   */
+  code: number;
+
+  /**
+   * 提示信息
+   */
+  msg: string;
+
+  /*
+   * 携带数据
+   * */
+  data: T
+}
 
 // 项目请求的基地址
 const baseUrl: string = "https://slwl-api.itheima.net"
@@ -91,7 +107,7 @@ export class MyHttp {
       // }
 
       const res = await httpRequest.request(baseUrl + url, options)
-      console.log("request res: ",JSON.stringify(res))
+      console.log("request res: ", JSON.stringify(res))
 
       const resData = res.result as returnsData<T>
       // Logger.info("resDate_Post:", JSON.stringify(resData))

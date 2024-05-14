@@ -135,6 +135,8 @@ export class TaskListItemModel implements TaskListItem {
 export enum TaskTypeEnum {
     Waiting = 1, // 待提货
     Line = 2, // 待交货
+    Conversion = 3, // 改派
     Delivered = 4, // 已交货
-    Finish = 6
+    Deprecated = 5, // 已作废
+    Finish = 6 // 已完成
 }
