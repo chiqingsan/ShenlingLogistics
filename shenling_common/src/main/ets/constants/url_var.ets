@@ -1,0 +1,1 @@
+export const BASE_URL = "https://slwl-api.itheima.net/driver" // 请求网络的基础地址

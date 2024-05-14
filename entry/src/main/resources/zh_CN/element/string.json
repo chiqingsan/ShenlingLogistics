@@ -1,0 +1,24 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "模块描述"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "神领物流一款用于司机提货 交货 回车登记的应用"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "神领物流"
+    },
+    {
+      "name": "ListenAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "ListenAbility_label",
+      "value": "label"
+    }
+  ]
+}

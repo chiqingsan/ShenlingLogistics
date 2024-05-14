@@ -1,0 +1,10 @@
+{
+  "module": {
+    "name": "shenling_common",
+    "type": "har",
+    "deviceTypes": [
+      "default",
+      "tablet"
+    ]
+  }
+}
