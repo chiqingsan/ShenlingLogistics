@@ -14,9 +14,9 @@ struct Index {
   @StorageProp("topHeight") topHeight: number = 0
   @State tabsIndex: number = 0
   @State TabsItemsList: tabsSubstance[] = [
-    { substance: "任务", src: $r("app.media.btn_test_sel") },
-    { substance: "消息", src: $r("app.media.btn_mess_nor") },
-    { substance: "我的", src: $r("app.media.btn_mine_nor") },
+    { substance: "任务", src: $r("app.media.ic_tab_btn_task") },
+    { substance: "消息", src: $r("app.media.ic_tab_btn_mess_nor") },
+    { substance: "我的", src: $r("app.media.ic_tab_btn_mine_nor") },
   ]
 
   aboutToAppear(): void {
@@ -26,6 +26,7 @@ struct Index {
 
   build() {
     Column() {
+
       Tabs() {
         ForEach(
           this.TabsItemsList,
@@ -45,7 +46,7 @@ struct Index {
           }
         )
       }
-      .barHeight(48)
+      .barHeight(70)
       .barPosition(BarPosition.End)
       .onTabBarClick((index) => {
         this.tabsIndex = index
@@ -57,13 +58,14 @@ struct Index {
 
   @Builder
   tabsItem(item: tabsSubstance, index: number) {
-    Column({ space: 4 }) {
+    Column() {
       Image(item.src)
         .width(20)
-      // .fillColor(this.tabsIndex === index ? "#EF4F3F" :"#818181" )
+        .aspectRatio(1)
+        .fillColor(this.tabsIndex === index ? "#EF4F3F" : "#818181")
       Text(item.substance)
-        .fontSize(10)
+        .fontSize(12)
         .fontColor(this.tabsIndex === index ? "#EF4F3F" : "#818181")
-    }
+    }.height(100)
   }
 }

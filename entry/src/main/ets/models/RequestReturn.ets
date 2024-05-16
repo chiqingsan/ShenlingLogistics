@@ -10,5 +10,5 @@ export interface returnsData<T> {
   /*
    * 携带数据
    * */
-  data:T
+  data:T | null
 }

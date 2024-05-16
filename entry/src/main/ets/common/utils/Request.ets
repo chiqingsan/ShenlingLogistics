@@ -1,131 +1,113 @@
-import { http } from '@kit.NetworkKit'
-import { promptAction, router } from '@kit.ArkUI'
+import http from '@ohos.net.http'
+import promptAction from '@ohos.promptAction'
 import { returnsData } from '../../models/RequestReturn'
+import { router } from '@kit.ArkUI'
+import { BASE_URL } from '../constants/url_var'
+import { PreferencesDefault, TOKEN_KEY } from './setting'
 
-// 项目请求的基地址
-const baseUrl: string = "https://slwl-api.itheima.net"
 
-export class MyHttp {
-  // 封装 get 请求方法
-  static async get<T>(url: string, query?: object, isJSON: boolean = false) {
+interface EmptyInterface {}
 
-    try {
-      // 创建请求对象
-      const httpRequest = http.createHttp()
+// 支持 get  post  put delete
+// Next版本不支持在箭头函数上传递泛型
 
-      // const user = AppStorage.get<iLoginDataModel>("user")
-      // const token = user?.token
-      // Logger.info("token", user?.token as string)
-
-      const res = await httpRequest.request(
-        baseUrl + url,
-        {
-          header: {
-            "Content-Type": isJSON ? "application/json" : "",
-            // 'Authorization': `Bearer ${token}`
-          },
-          extraData: query,
-          expectDataType: http.HttpDataType.OBJECT
+async function requestHttp<T>(url: string = "", method: http.RequestMethod = http.RequestMethod.GET, data?: object): Promise<T> {
+  const httpRequest = http.createHttp() // 创建一个网络请求
+  let urlStr = BASE_URL + url // 拼接地址
+  // 参数放在哪里
+  // Get时 自动拼入到url上
+  if (method === http.RequestMethod.GET) {
+    if (data && Object.keys(data).length) {
+      // { a: 1, b: 2, c: 3 } = > ["a", "b, "c"]
+      // url?a=1&b=2&c=3
+      urlStr += "?" + Object.keys(data).map(key => {
+        if (data[key]) {
+          return `${key}=${data[key]}` // a=1 =>
         }
-      )
-
-      const resData = res.result as returnsData<T>
-      // 如果业务码为401, 则提示登录过期, 跳转回登录页
-      // if (resData.code === 401) {
-      //
-      //   // const userDataStr = await PreferencesManager.getData<string>("store", "USERDATA", "")
-      //   // if (userDataStr) {
-      //   //   RefreshTheToken(userDataStr)
-      //   // } else {
-      //   //   promptAction.showToast({ message: '登录超时，请重新登录' })
-      //   //   router.pushUrl({ url: BasicConstant.PAGE_LoginPage })
-      //   //
-      //   // }
-      //
-      //   // 删除磁盘中的用户数据
-      //   PreferencesManager.delAllData("store", "USERDATA")
-      //   // 清楚内存中的用户数据
-      //   AppStorage.set("user", {} as iLoginDataModel)
-      //   promptAction.showToast({ message: '登录超时，请重新登录' })
-      //   router.pushUrl({ url: BasicConstant.PAGE_LoginPage })
-      //
-      // }
-
-      return resData
-
-    } catch (err) {
-      promptAction.showToast({
-        message: "Get请求出错误"
-      })
-      // Logger.error("Get", JSON.stringify(err))
-
-      return Promise.reject(err)
+        return ""
+      }).join("&") // ["a=1", "b=2", "c=3"]
     }
+  }
+  // 设置请求对象
+  // 这里可以将返回结果制定成对象
+  let config: http.HttpRequestOptions = {
+    method,
+    readTimeout: 10000, // 超时时间
+    extraData: method === http.RequestMethod.GET ? "" : data || {} as EmptyInterface,
+    expectDataType: http.HttpDataType.OBJECT,
+    // 请求头
+    header: {
+      'Content-Type': 'application/json',
+      "Authorization": AppStorage.get<string>(TOKEN_KEY) || ''
+    }
+  }
+  try {
+    // 发请求
+    const res = await httpRequest.request(urlStr, config)
+    if (res.responseCode === 401) {
+      // token超时
+      AppStorage.setOrCreate<string>(TOKEN_KEY, "") // Delete不可以 是个坑 删不掉持久化数据
+      PreferencesDefault.setUserToken("") // 删除首选项的token
+      promptAction.showToast({
+        message: 'token超时了'
+      })
+      // 回登录
+      router.replaceUrl({
+        url: 'pages/UserLogin/LoginPhone'
+      })
+      // 返回错误 停止执行
+      return Promise.reject(new Error("token超时了"))
+    }
+    else if (res.responseCode === 404) {
+      promptAction.showToast({
+        message: '请求地址不正确'
+      })
+      return Promise.reject(new Error("请求地址不正确"))
+    } else {
+      // res.result就是接口返回的结构
+      const result = res.result as returnsData<T>
+      // code值只要不是200都是失败的
+      if (result.code === 200) {
+        return result.data as T
+      } else {
+        promptAction.showToast({
+          message: result.msg
+        })
+        return Promise.reject(new Error(result.msg))
+      }
+    }
+  }
+  catch (error) {
+    promptAction.showToast({ message: error.message })
+    return Promise.reject(error)
+  }
+  finally {
+    httpRequest.destroy() // 销毁请求 请求结束了
+  }
+}
 
+export class SlRequest {
+  static async get<T>(url: string, data?: object): Promise<T> {
+    const resData = await requestHttp<T>(url, http.RequestMethod.GET, data)
+    console.info("get resData:", JSON.stringify(resData))
+    return resData
   }
 
-  // 封装 post 请求方法
-  static async post<T>(url: string, query: object) {
+  static async post<T>(url: string, data?: object): Promise<T> {
+    const resData = await requestHttp<T>(url, http.RequestMethod.POST, data)
+    console.info("get resData:", JSON.stringify(resData))
+    return resData
+  }
 
-    try {
-      // 创建请求对象
-      const httpRequest = http.createHttp()
+  static async put<T>(url: string, data?: object): Promise<T> {
+    const resData = await requestHttp<T>(url, http.RequestMethod.PUT, data)
+    console.info("get resData:", JSON.stringify(resData))
+    return resData
+  }
 
-      const options: http.HttpRequestOptions = {
-        method: http.RequestMethod.POST,
-        header: {
-          "Content-Type": "application/json"
-        },
-        extraData: query,
-        expectDataType: http.HttpDataType.OBJECT
-      }
-
-      //
-      // const user = AppStorage.get<iLoginDataModel>("user")
-      // const token = user?.token
-      // Logger.info("token_Post", user?.token as string)
-
-      // 判断有无token,有则添加头部的token信息
-      // if (token && options.header) {
-      //   options.header["Authorization"] = `Bearer ${token}`
-      // }
-
-      const res = await httpRequest.request(baseUrl + url, options)
-      console.log("request res: ",JSON.stringify(res))
-
-      const resData = res.result as returnsData<T>
-      // Logger.info("resDate_Post:", JSON.stringify(resData))
-      // // 如果业务码为401, 则提示登录过期, 跳转回登录页
-      // if (resData.code === 401) {
-      //
-      //   // const userDataStr = await PreferencesManager.getData<string>("store", "USERDATA", "")
-      //   // if (userDataStr) {
-      //   //   RefreshTheToken(userDataStr)
-      //   // } else {
-      //   //   promptAction.showToast({ message: '登录超时，请重新登录' })
-      //   //   router.pushUrl({ url: BasicConstant.PAGE_LoginPage })
-      //   //
-      //   // }
-      //
-      //   // 删除磁盘中的用户数据
-      //   PreferencesManager.delAllData("store", "USERDATA")
-      //   // 清楚内存中的用户数据
-      //   AppStorage.set("user", {} as iLoginDataModel)
-      //   promptAction.showToast({ message: '登录超时，请重新登录' })
-      //   router.pushUrl({ url: BasicConstant.PAGE_LoginPage })
-      //
-      // }
-
-      return resData
-
-
-    } catch (err) {
-      promptAction.showToast({
-        message: "Post请求出错误"
-      })
-      console.error("Post", JSON.stringify(err))
-
-      return Promise.reject(err)
-    }
+  static async delete<T>(url: string, data?: object): Promise<T> {
+    const resData = await requestHttp<T>(url, http.RequestMethod.DELETE, data)
+    console.info("get resData:", JSON.stringify(resData))
+    return resData
   }
 }
