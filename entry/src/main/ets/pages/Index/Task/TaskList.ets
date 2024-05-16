@@ -93,7 +93,7 @@ struct TaskList {
           })
       }
       .justifyContent(FlexAlign.Center)
-      .padding({ left: 15, right: 15, bottom: 5 })
+      .padding({ left: 8, right: 8, bottom: 5 })
 
       Row() {
         // 完成搜索页需要测试点击之后键盘和弹层同时弹出的情况

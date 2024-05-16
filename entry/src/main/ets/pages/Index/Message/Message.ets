@@ -57,7 +57,7 @@ struct Message {
       .onTabBarClick((index) => {
         this.currentTabName = index === 0 ? 'information' : 'notice'
       })
-    }.width('100%').height('100%').padding({ top: this.topHeight })
+    }.width('100%').height('100%')
   }
 }
 

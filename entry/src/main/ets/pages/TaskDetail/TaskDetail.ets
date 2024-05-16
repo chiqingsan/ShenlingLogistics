@@ -418,7 +418,7 @@ struct TaskDetail {
   build() {
     Column() {
       HmNavBar({ title: '任务详情' })
-        .padding({ top: this.topHeight })
+
       Scroll(this.scroll) {
         // Scroll里面只能有一个组件
         Column() {
@@ -461,9 +461,9 @@ struct TaskDetail {
 
         }
         .padding({
-          bottom: 130
+          bottom: 160
         })
-      }
+      }.scrollBar(BarState.Off)
 
       if (this.taskDetailData.status !== TaskTypeEnum.Finish) {
         // 只有在非完成情况下 才显示底部按钮

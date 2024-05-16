@@ -1,8 +1,9 @@
-import router from '@ohos.router'
+
 import { TOKEN_KEY,AdvertClass, UserSettingClass } from 'shenling_common'
+import { router } from '@kit.ArkUI'
 
 
-PersistentStorage.PersistProp(TOKEN_KEY, "")
+PersistentStorage.persistProp(TOKEN_KEY, "")
 @Entry
 @Component
 struct Start {
