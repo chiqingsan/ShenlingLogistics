@@ -24,6 +24,11 @@ struct TaskList {
     alignment: DialogAlignment.Center,
     builder: HmLoading()
   })
+  theStatusOfTheGoods: Record<string, string> = {
+    "1": "待提货",
+    "2": "在途",
+    "6": "已完成"
+  }
 
   async getTaskList(append: boolean) {
     const result = await getTaskList(this.queryParams)
@@ -165,6 +170,7 @@ struct TaskList {
       if (this.queryParams.status === TaskTypeEnum.Finish) {
         this.getSearchForm()
       }
+      // if (this.taskListData.length != 0) {
       HmList({
         // 数据源
         dataSource: this.taskListData,
@@ -182,8 +188,18 @@ struct TaskList {
         loadingText: '疯狂加载中',
         finishText: '没啦没啦'
       }).layoutWeight(1)
+      // } else {
+      //   Column({ space: 20 }) {
+      //     Image($r("app.media.ic_not_found"))
+      //       .width(200)
+      //       .height(120)
+      //     Text(`无${this.theStatusOfTheGoods[this.queryParams.status.toString()]}货物`)
+      //       .fontColor("#818181")
+      //   }
+      // }
     }
     .layoutWeight(1)
+    // .justifyContent(FlexAlign.Center)
     .backgroundColor("#F4F4F4")
 
   }

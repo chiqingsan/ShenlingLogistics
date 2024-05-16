@@ -74,7 +74,7 @@ struct Index {
       })
       .animationDuration(300)
       .scrollable(false)
-      .padding({  bottom: 12 })
+      .padding({ bottom: 18 })
     }
   }
 }

@@ -1,8 +1,8 @@
 import { TOKEN_KEY } from 'shenling_common'
-import { LoginForm, LoginFormModel } from '../../models/user'
+import { LoginFormModel } from '../../models/user'
 import { login } from '../../api'
 import { UserSettingClass } from 'shenling_common'
-import { router} from '@kit.ArkUI'
+import { router } from '@kit.ArkUI'
 
 PersistentStorage.PersistProp(TOKEN_KEY, "")
 
@@ -30,39 +30,40 @@ struct Login {
   }
 
   // 检查账户和密码的校验
-  getFormValidate () {
-    if(this.accountForm.account && this.accountForm.password) {
+  getFormValidate() {
+    if (this.accountForm.account && this.accountForm.password) {
       return true
     }
     return false
   }
-  async login () {
+
+  async login() {
     try {
       this.showLoading = true
       const token = await login(this.accountForm)
       // 写入持久化
-      AppStorage.Set<string>(TOKEN_KEY, token)
+      AppStorage.setOrCreate<string>(TOKEN_KEY, token)
       new UserSettingClass(getContext(this)).setUserToken(token)
-      router.pushUrl({
+      router.replaceUrl({
         url: 'pages/Index/Index'
       })
-    }catch(error) {
+    } catch (error) {
     }
     finally {
       this.showLoading = false
     }
-  
+
   }
 
   build() {
     Column() {
       // 顶部标题
-      Text("神领快递").fontColor($r('app.color.text_primary')).fontSize(18).height(25)
+      Text("神领快递").fontColor($r('app.color.text_primary')).fontSize(18).height(25).fontWeight(600)
       // 账号登录
       Row() {
         Text('账号登录').fontColor($r('app.color.text_primary')).fontSize(24).fontWeight(FontWeight.Bold)
         Row() {
-          Text("账号登录").fontColor($r('app.color.primary')).fontSize(16).fontWeight(FontWeight.Bold)
+          Text("手机号登录").fontColor($r('app.color.primary')).fontSize(16).fontWeight(FontWeight.Bold)
           Image($r("app.media.ic_angle")).width(10).height(10).margin({ left: 5 })
         }
       }
@@ -77,7 +78,7 @@ struct Login {
           this.accountForm.account = value
         })
         .onSubmit(() => {
-          if(this.getFormValidate()) {
+          if (this.getFormValidate()) {
             this.login()
           }
         })
@@ -85,26 +86,30 @@ struct Login {
       // 密码框
       TextInput({ placeholder: '请输入密码', text: this.accountForm.password })
         .inputStyle2()
-        .type(InputType.Password) // 密码框
-        .showPasswordIcon(true) // 显示密码按钮
+        .type(InputType.Password)// 密码框
+        .showPasswordIcon(true)// 显示密码按钮
+        .passwordIcon({
+          onIconSrc: $r("app.media.eyeon"),
+          offIconSrc: $r("app.media.eyeoff")
+        })
         .onChange(value => {
           this.accountForm.password = value
         })
         .onSubmit(() => {
-          if(this.getFormValidate()) {
+          if (this.getFormValidate()) {
             this.login()
           }
         })
-     // 登录按钮
+      // 登录按钮
       Button({ type: ButtonType.Capsule }) {
         Row() {
           if (this.showLoading) {
-            LoadingProgress().width(20).height(20).margin({ right: 12 }).color($r('app.color.white'))
+            LoadingProgress().width(25).aspectRatio(1).margin({ right: 12 }).color($r('app.color.white'))
           }
           Text('登录').fontColor($r('app.color.white'))
         }
       }
-      .backgroundColor(this.getFormValidate() ? $r('app.color.primary') :  $r('app.color.primary_disabled'))
+      .backgroundColor(this.getFormValidate() ? $r('app.color.primary') : $r('app.color.primary_disabled'))
       .width('100%')
       .height(50)
       .margin({ top: 50 })
@@ -113,7 +118,6 @@ struct Login {
         this.login()
       })
     }
-    .padding({ left: 32, right: 32 })
-    .margin({ top: 40 })
+    .padding({ left: 32, right: 32, top: 10 })
   }
 }

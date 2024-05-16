@@ -25,13 +25,14 @@ struct MessageTemplate {
     }
     const result = await getMessage(this.queryParams)
     if (append) {
-      this.messageList = this.messageList.concat(result.items)   // 追加数据
+      this.messageList = this.messageList.concat(result.items) // 追加数据
     } else {
       this.messageList = result.items // 覆盖数据
     }
     this.queryParams.page++
     this.allPage = result.pages
   }
+
   async refreshData() {
     this.allPage = 1 // 只要下拉就默认有一页
     this.queryParams.page = 1
@@ -41,13 +42,14 @@ struct MessageTemplate {
 
   @Builder
   renderItem(item: object) {
-    if(this.type === "information") {
+    if (this.type === "information") {
       this.renderInformationItem(item as MessageItemModel)
     }
-    if(this.type === "notice") {
+    if (this.type === "notice") {
       this.renderNoticeItem(item as MessageItemModel)
     }
   }
+
   // 读取
   readSuccess() {
     this.messageList = this.messageList.map(item => {
@@ -55,8 +57,9 @@ struct MessageTemplate {
       return item
     })
   }
+
   @Builder
-  renderInformationItem (item: MessageItemModel) {
+  renderInformationItem(item: MessageItemModel) {
     Row() {
       Row() {
         if (item.isRead === 0) {
@@ -93,6 +96,7 @@ struct MessageTemplate {
       })
     })
   }
+
   @Builder
   renderNoticeItem(message: MessageItemModel) {
     Column() {
@@ -109,7 +113,7 @@ struct MessageTemplate {
       }
 
       Divider().color($r('app.color.background_page')).margin({ top: 13 })
-      Text(message.content.replace(new RegExp("/\/n/") , ""))
+      Text(message.content.replace(new RegExp("/\/n/"), ""))
         .margin({ top: 11, bottom: 22.5 })
         .fontSize(13)
         .fontColor($r('app.color.text_secondary'))
@@ -160,20 +164,25 @@ struct MessageTemplate {
         right: 17,
         top: 14,
         bottom: 14
-      }).width('100%')// 全部已读
+      }).width('100%') // 全部已读
       // 公告内容
-      HmList({
-        finished: this.allPage < this.queryParams.page,
-        dataSource: $messageList,
-        onRefresh: async () => {
-          await this.refreshData()
-        },
-        onLoad: async () => {
-          await this.getMessage(true)
-        } ,
-        renderItem: (item: object) => {
-          this.renderItem(item)
-        }
+      Column() {
+        HmList({
+          finished: this.allPage < this.queryParams.page,
+          dataSource: $messageList,
+          onRefresh: async () => {
+            await this.refreshData()
+          },
+          onLoad: async () => {
+            await this.getMessage(true)
+          },
+          renderItem: (item: object) => {
+            this.renderItem(item)
+          }
+        })
+      }.padding({
+        left: this.type === "notice" ? 15 : 0,
+        right: this.type === "notice" ? 15 : 0,
       })
     }.height('100%')
   }

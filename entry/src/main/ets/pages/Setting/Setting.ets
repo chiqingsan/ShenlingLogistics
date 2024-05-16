@@ -1,5 +1,6 @@
 import router from '@ohos.router'
 import { HmCard, HmCardItem, HmNavBar, HmConfirm, TOKEN_KEY, UserSettingClass } from 'shenling_common'
+import { windowManager } from '../../common/utils/WindowManager'
 
 
 @Entry
@@ -23,34 +24,43 @@ struct Setting {
     alignment: DialogAlignment.Center,
     autoCancel: false
   })
-  // 删除token 同步之前的首选项
-   logout () {
-     AppStorage.Set<string>(TOKEN_KEY, "")
-     new UserSettingClass(getContext(this)).setUserToken("")
-     router.replaceUrl({
-       url: 'pages/Login/Login'
-     })
 
-   }
+  // 删除token 同步之前的首选项
+  logout() {
+    AppStorage.set<string>(TOKEN_KEY, "")
+    new UserSettingClass(getContext(this)).setUserToken("")
+    router.replaceUrl({
+      url: 'pages/Login/Login'
+    })
+    windowManager.enableFullScreen(false)
+
+  }
+
   build() {
     Column() {
       HmNavBar({ title: '系统设置' })
       HmCard() {
-        HmCardItem({ leftTitle: '换绑手机', rightText: '', onRightClick: () => {
-          router.pushUrl({
-            url: 'pages/Setting/BindMobile'
-          })
-        } })
-        HmCardItem({ leftTitle: '修改密码', rightText: '', onRightClick: () => {
-          router.pushUrl({
-            url: 'pages/Setting/ChangePassword'
-          })
-        } })
-        HmCardItem({ leftTitle: '消息通知设置', rightText: '', onRightClick: () => {
-          router.pushUrl({
-            url: 'pages/Setting/MessageSend'
-          })
-        } })
+        HmCardItem({
+          leftTitle: '换绑手机', rightText: '', onRightClick: () => {
+            router.pushUrl({
+              url: 'pages/Setting/BindMobile'
+            })
+          }
+        })
+        HmCardItem({
+          leftTitle: '修改密码', rightText: '', onRightClick: () => {
+            router.pushUrl({
+              url: 'pages/Setting/ChangePassword'
+            })
+          }
+        })
+        HmCardItem({
+          leftTitle: '消息通知设置', rightText: '', onRightClick: () => {
+            router.pushUrl({
+              url: 'pages/Setting/MessageSend'
+            })
+          }
+        })
         HmCardItem({ leftTitle: '清理缓存', rightText: '', showBottomBorder: false })
       }
 

@@ -1,6 +1,6 @@
 
-import { TOKEN_KEY,AdvertClass, UserSettingClass } from 'shenling_common'
 import { router } from '@kit.ArkUI'
+import { AdvertClass, TOKEN_KEY, UserSettingClass } from 'shenling_common'
 
 
 PersistentStorage.persistProp(TOKEN_KEY, "")
@@ -31,16 +31,17 @@ struct Start {
   }
   // 去下一个页面
   toNext() {
-    if(AppStorage.Get<string>(TOKEN_KEY)) {
+    if(AppStorage.get<string>(TOKEN_KEY)) {
       // 有token
-      router.replaceUrl({
+      router.pushUrl({
         url: 'pages/Index/Index'
       })
     }else {
-      router.replaceUrl({
+      router.pushUrl({
         url: 'pages/Login/Login'
       })
     }
+    router.clear()
   }
   build() {
    Stack({ alignContent: Alignment.TopEnd }) {
