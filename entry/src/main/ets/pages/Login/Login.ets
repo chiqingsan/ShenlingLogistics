@@ -1,12 +1,16 @@
+import { LoginFormModel } from '../../models'
+
 @Entry
 @Component
 struct Login {
   // 控制登录动态组件
   @State showLoading: boolean = false
-  // 账号
-  @State account: string = ""
-  // 密码
-  @State password: string = ""
+  // 账号 密码
+  @State
+  accountForm: LoginFormModel = new LoginFormModel({
+    account: '',
+    password: ''
+  })
 
   @Styles
   loginStyle() {
@@ -37,7 +41,7 @@ struct Login {
       TextInput({ placeholder: '请输入账号' })
         .loginStyle()
         .onChange((val) => {
-          this.account = val
+          this.accountForm.account = val
         })
 
       // 密码框
@@ -51,10 +55,10 @@ struct Login {
         })
         .cancelButton({
           style: CancelButtonStyle.INPUT,
-          icon: { size: 15 }
+          icon: { size: 18 }
         })
         .onChange((val) => {
-          this.password = val
+          this.accountForm.password = val
         })
 
       // 登录按钮
@@ -66,11 +70,11 @@ struct Login {
           Text('登录').fontColor($r('app.color.white'))
         }
       }
-      .backgroundColor(this.account.length && this.password.length ? $r("app.color.btn_red") :
-      $r('app.color.primary_disabled'))
+      .backgroundColor($r("app.color.btn_red"))
       .width('100%')
       .height(50)
       .margin({ top: 50 })
+      .enabled(this.accountForm.account && this.accountForm.password ? true : false)
     }
     .padding({ left: 32, right: 32 })
     .margin({ top: 40 })
