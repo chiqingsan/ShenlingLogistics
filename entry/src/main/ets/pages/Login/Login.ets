@@ -1,16 +1,43 @@
+import { TOKEN_KEY, UserSettingClass } from '@hm/basic/Index'
+import { login } from '../../api/user'
 import { LoginFormModel } from '../../models'
+import { router } from '@kit.ArkUI'
 
 @Entry
 @Component
 struct Login {
   // 控制登录动态组件
   @State showLoading: boolean = false
-  // 账号 密码
+  // 账号 密码 todo 测试完成后需要删除账号密码
   @State
   accountForm: LoginFormModel = new LoginFormModel({
-    account: '',
-    password: ''
+    account: 'chiqingsan',
+    password: '123456'
   })
+
+  // 调用登录接口
+  async login() {
+    if (!this.showLoading) {
+      try {
+        this.showLoading = true
+        const token = await login(this.accountForm)
+        AppStorage.setOrCreate(TOKEN_KEY, token) // 写入全局状态
+        new UserSettingClass(getContext(this)).setUserToken(token) // 存入首选项
+        router.replaceUrl({
+          url: 'pages/Index'
+        })
+      } catch (error) {
+        console.log("Login_error:", JSON.stringify(error))
+      } finally {
+        this.showLoading = false
+      }
+    }
+  }
+
+  // 输入合法判断
+  getFormValidate() {
+    return this.accountForm.account && this.accountForm.password ? true : false
+  }
 
   @Styles
   loginStyle() {
@@ -38,14 +65,14 @@ struct Login {
       .margin({ top: 50, bottom: 50 })
 
       // 用户名输入框
-      TextInput({ placeholder: '请输入账号' })
+      TextInput({ placeholder: '请输入账号', text: this.accountForm.account })
         .loginStyle()
         .onChange((val) => {
           this.accountForm.account = val
         })
 
       // 密码框
-      TextInput({ placeholder: '请输入密码' })
+      TextInput({ placeholder: '请输入密码', text: this.accountForm.password })
         .loginStyle()
         .type(InputType.Password)// 密码框
         .showPasswordIcon(true)// 显示密码按钮
@@ -57,6 +84,11 @@ struct Login {
           style: CancelButtonStyle.INPUT,
           icon: { size: 18 }
         })
+        .onSubmit(() => {
+          if (this.getFormValidate()) {
+            this.login()
+          }
+        })
         .onChange((val) => {
           this.accountForm.password = val
         })
@@ -67,14 +99,18 @@ struct Login {
           if (this.showLoading) {
             LoadingProgress().width(20).aspectRatio(1).margin({ right: 12 }).color($r('app.color.white'))
           }
-          Text('登录').fontColor($r('app.color.white'))
+          Text('登录')
+            .fontColor($r('app.color.white'))
         }
       }
       .backgroundColor($r("app.color.btn_red"))
       .width('100%')
       .height(50)
       .margin({ top: 50 })
-      .enabled(this.accountForm.account && this.accountForm.password ? true : false)
+      .enabled(this.getFormValidate())
+      .onClick(() => {
+        this.login()
+      })
     }
     .padding({ left: 32, right: 32 })
     .margin({ top: 40 })

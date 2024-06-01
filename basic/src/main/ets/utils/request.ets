@@ -74,7 +74,7 @@ async function requestHttp<T>(url: string = "", method: http.RequestMethod = htt
 
 }
 
-export class Request {
+export class RequestModels {
   static get<T>(url: string, data?: object): Promise<T> {
     return requestHttp<T>(url, http.RequestMethod.GET, data)
   }
