@@ -4,4 +4,5 @@ export class AdvertClass {
   adTime: number = 5 // 广告时长
   adUrl?: string = '' // 广告链接
   adImg?: ResourceStr = '' // 广告图片
+
 }
