@@ -99,6 +99,10 @@
     {
       "name": "upload_panel",
       "value": "#f2f2f2"
+    },
+    {
+      "name": "btn_red",
+      "value": "#EF4F3F"
     }
   ]
 }

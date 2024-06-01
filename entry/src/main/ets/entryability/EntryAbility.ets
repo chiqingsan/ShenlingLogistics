@@ -24,8 +24,9 @@ export default class EntryAbility extends UIAbility {
       // 开一个定时器,模拟请求
       setTimeout(() => {
         // 返回广告配置
+        // todo 开发时为了方便,广告业默认不展示
         resolve({
-          showAd: true,
+          showAd: false,
           adTime: 5,
           adImg: $r("app.media.start")
         } as AdvertClass) // 广告信息
