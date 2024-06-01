@@ -1,7 +1,7 @@
 import { AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
-import { AdvertClass, UserSettingClass } from '@hm/basic'
+import { AdvertClass, TOKEN_KEY, UserSettingClass } from '@hm/basic'
 
 
 export default class EntryAbility extends UIAbility {
@@ -29,7 +29,7 @@ export default class EntryAbility extends UIAbility {
           adTime: 5,
           adImg: $r("app.media.start")
         } as AdvertClass) // 广告信息
-      }, 250)
+      }, 200)
     })
     // 通过模拟请求拿到广告信息
     // 写入首选项
@@ -41,9 +41,19 @@ export default class EntryAbility extends UIAbility {
       await win.showWindow()
       win.setUIContent("pages/Start/Start")
     }
+    // 尝试获取用户的token
+    const token = await adSetting.getUserToken()
+    // 设置需要进入的页面路径
+    let pagePath:string
+    if(token) {
+      AppStorage.setOrCreate(TOKEN_KEY, token)
+      pagePath = '/pages/Index'.slice(1)
+    }else {
+      pagePath = "/pages/Login/Login".slice(1)
+    }
 
-    // 进入首页
-    windowStage.loadContent('pages/Index', (err) => {
+    // 进入pages页面
+    windowStage.loadContent(pagePath, (err) => {
       if (err.code) {
         hilog.error(0x0000, 'testTag', 'Failed to load the content. Cause: %{public}s', JSON.stringify(err) ?? '');
         return;
