@@ -1,4 +1,5 @@
 import { TabClass } from '@hm/basic'
+import My from './My/My'
 
 @Entry
 @Component
@@ -35,7 +36,7 @@ struct Index {
   }
 
   build() {
-    Tabs({ barPosition: BarPosition.End, index: $$this.currentIndex }) {
+    Tabs({ barPosition: BarPosition.End, index: this.currentIndex }) {
       ForEach(this.tabsData, (item: TabClass) => {
         TabContent() {
           if (item.name === 'task') {
@@ -43,10 +44,12 @@ struct Index {
           } else if (item.name === 'message') {
             Text("消息组件")
           } else {
-            Text("我的组件")
+            My()
           }
         }.tabBar(this.getTabBar(item))
       })
-    }
+    }.onTabBarClick((index) => {
+      this.currentIndex = index
+    })
   }
 }
