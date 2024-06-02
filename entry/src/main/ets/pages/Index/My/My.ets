@@ -1,18 +1,30 @@
 import { HmCard, HmCardItem } from '@hm/basic/Index'
+import { UserInfo, UserInfoModel } from '../../../models'
+import { getUserInfo } from '../../../api/user'
 
 @Entry
 @Component
 struct My {
+  @StorageProp("userInfo") userInfo: UserInfoModel = new UserInfoModel({} as UserInfo)
+  @Consume @Watch("getUserInfo") currentName: string
+
+  async getUserInfo() {
+    if (this.currentName === 'my') {
+      this.userInfo = await getUserInfo()
+      console.log("My_this.userInfo:", JSON.stringify(this.userInfo))
+    }
+  }
+
   build() {
     Column() {
       // 基本信息
       Column() {
-        Image($r("app.media.ic_avatar_driver"))
+        Image(this.userInfo.avatar || $r("app.media.ic_avatar_driver"))
           .width(67)
           .height(67)
           .borderRadius(34.5)
           .backgroundColor($r('app.color.white'))
-        Text("司机")
+        Text(this.userInfo.name)
           .fontSize(18)
           .fontWeight(600)
           .lineHeight(25)
@@ -21,8 +33,12 @@ struct My {
             bottom: 9
           })
           .fontColor($r('app.color.white'))
-        Text(`司机编号: 66666666`).fontSize(14).fontWeight(400).lineHeight(20).fontColor($r('app.color.white'))
-        Text(`手机号: 66666666`)
+        Text(`司机编号: ${this.userInfo.number}`)
+          .fontSize(14)
+          .fontWeight(400)
+          .lineHeight(20)
+          .fontColor($r('app.color.white'))
+        Text(`手机号: ${this.userInfo.phone}`)
           .fontSize(14)
           .fontWeight(400)
           .lineHeight(20)

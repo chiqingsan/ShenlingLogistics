@@ -1,11 +1,11 @@
 import { TabClass } from '@hm/basic'
 import My from './My/My'
+import { getUserInfo } from '../../api/user'
 
 @Entry
 @Component
 struct Index {
-  @State
-  currentIndex: number = 0 // 当前激活项
+  @State @Watch("updateName") currentIndex: number = 0 // 当前激活项
   @State tabsData: TabClass[] = [{
     title: '任务',
     name: 'task',
@@ -19,6 +19,15 @@ struct Index {
     name: 'my',
     icon: $r("app.media.ic_tab_btn_mine_nor")
   }]
+  @Provide currentName: string = ""
+
+  async aboutToAppear(): Promise<void> {
+    AppStorage.setOrCreate("userInfo", await getUserInfo())
+  }
+
+  updateName() {
+    this.currentName = this.tabsData[this.currentIndex].name
+  }
 
   @Builder
   getTabBar(item: TabClass) {
