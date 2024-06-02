@@ -20,7 +20,7 @@ export default class EntryAbility extends UIAbility {
     const adSetting = new UserSettingClass(this.context)
 
     // 模拟异步请求,拿到广告的配置
-    const adRes = await new Promise<AdvertClass>( (resolve,reject) => {
+    const adRes = await new Promise<AdvertClass>((resolve, reject) => {
       // 开一个定时器,模拟请求
       setTimeout(() => {
         // 返回广告配置
@@ -35,7 +35,7 @@ export default class EntryAbility extends UIAbility {
     // 通过模拟请求拿到广告信息
     // 写入首选项
     await adSetting.setUserAd(adRes)
-    if(adRes.showAd) {
+    if (adRes.showAd) {
       // 展示广告的情况 展示广告页 有时限
       // 创建一个子窗口 子窗口加载广告 广告播完 窗口销毁
       const win = await windowStage.createSubWindow("ad_window")
@@ -45,11 +45,11 @@ export default class EntryAbility extends UIAbility {
     // 尝试获取用户的token
     const token = await adSetting.getUserToken()
     // 设置需要进入的页面路径
-    let pagePath:string
-    if(token) {
+    let pagePath: string
+    if (token) {
       AppStorage.setOrCreate(TOKEN_KEY, token)
-      pagePath = '/pages/Index'.slice(1)
-    }else {
+      pagePath = '/pages/Index/Index'.slice(1)
+    } else {
       pagePath = "/pages/Login/Login".slice(1)
     }
 
