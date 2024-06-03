@@ -1,12 +1,28 @@
-import { AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
-import { hilog } from '@kit.PerformanceAnalysisKit';
-import { window } from '@kit.ArkUI';
+import { AbilityConstant, errorManager, UIAbility, Want } from '@kit.AbilityKit';
+import { FaultLogger, hilog } from '@kit.PerformanceAnalysisKit';
+import { promptAction, window } from '@kit.ArkUI';
 import { AdvertClass, TOKEN_KEY, UserSettingClass } from '@hm/basic'
 
+let errorManagerId = -1
 
 export default class EntryAbility extends UIAbility {
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onCreate');
+
+    // todo 需要对错误信息进行记录或者上报
+    // 注册错误观察器,来捕获未知的错误
+    errorManagerId = errorManager.on("error", {
+      async onUnhandledException() {
+        const errorInfoList = await FaultLogger.query(FaultLogger.FaultType.JS_CRASH)
+        const errorInfo = errorInfoList[0]
+        // AlertDialog.show({
+        //   message: JSON.stringify(errorInfo, null, 2)
+        // })
+        promptAction.showToast({
+          message: "出现未知错误"
+        })
+      }
+    })
   }
 
   onDestroy(): void {
