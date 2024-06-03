@@ -1,5 +1,5 @@
 import { RequestModels } from '@hm/basic/Index'
-import { LoginFormModel, UserInfoModel } from '../models'
+import { LoginFormModel, UserInfoModel, UserTaskInfoModel, UserTaskInfoParamsModel } from '../models'
 
 // 登录接口实现
 export const login = (data: LoginFormModel) => {
@@ -10,4 +10,9 @@ export const login = (data: LoginFormModel) => {
 // 获取用户信息
 export const getUserInfo = () => {
   return RequestModels.get<UserInfoModel>("/users")
+}
+
+// 获取用户任务数据
+export const getUserTaskInfo = (data: UserTaskInfoParamsModel) => {
+  return RequestModels.get<UserTaskInfoModel>("/users/taskReport", data)
 }
