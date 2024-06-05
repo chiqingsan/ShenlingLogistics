@@ -1,6 +1,7 @@
 import { TabClass } from '@hm/basic'
 import My from './My/My'
 import { getUserInfo } from '../../api/user'
+import TaskTabs from './Task/TaskTabs'
 
 @Entry
 @Component
@@ -49,15 +50,17 @@ struct Index {
       ForEach(this.tabsData, (item: TabClass) => {
         TabContent() {
           if (item.name === 'task') {
-            Text("任务组件")
+            TaskTabs()
           } else if (item.name === 'message') {
-            Text("消息组件")
+            Text("消息页面")
           } else {
             My()
           }
         }.tabBar(this.getTabBar(item))
       })
-    }.onTabBarClick((index) => {
+    }
+    .scrollable(false)
+    .onTabBarClick((index) => {
       this.currentIndex = index
     })
   }
