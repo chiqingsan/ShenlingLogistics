@@ -21,10 +21,11 @@ struct Login {
       try {
         this.showLoading = true
         const token = await login(this.accountForm)
+        // console.log("Login_token:", JSON.stringify(token))
         AppStorage.setOrCreate(TOKEN_KEY, token) // 写入全局状态
         new UserSettingClass(getContext(this)).setUserToken(token) // 存入首选项
         router.replaceUrl({
-          url: 'pages/Index'
+          url: 'pages/Index/Index'
         })
       } catch (error) {
         console.log("Login_error:", JSON.stringify(error))
