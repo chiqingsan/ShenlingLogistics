@@ -89,6 +89,10 @@
       "value": "#323233"
     },
     {
+      "name": "gray_9",
+      "value": "#F3F4F5"
+    },
+    {
       "name": "btn_plain",
       "value": "#FFE0DD"
     },
