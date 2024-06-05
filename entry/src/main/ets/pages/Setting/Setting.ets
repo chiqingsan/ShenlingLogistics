@@ -1,9 +1,36 @@
-import { HmCard, HmCardItem, HmNavBar } from '@hm/basic'
+import { HmCard, HmCardItem, HmConfirm, HmNavBar, TOKEN_KEY, UserSettingClass } from '@hm/basic'
 import { router } from '@kit.ArkUI'
 
 @Entry
 @Component
 struct Setting {
+  confirm: CustomDialogController = new CustomDialogController({
+    builder: HmConfirm({
+      message: '确定要退出登录吗?',
+      buttonList: [{
+        text: '取消'
+      }, {
+        text: '确定',
+        fontColor: $r('app.color.primary'),
+        action: () => {
+          this.logout()
+        }
+      }]
+    }),
+    customStyle: true,
+    alignment: DialogAlignment.Center,
+    autoCancel: false
+  })
+
+  logout() {
+    // 删除token
+    AppStorage.set<string>(TOKEN_KEY, "")
+    new UserSettingClass(getContext(this)).setUserToken("")
+    router.replaceUrl({
+      url: 'pages/Login/Login'
+    })
+  }
+
   build() {
     Column() {
       HmNavBar({ title: "系统设置" })
@@ -25,6 +52,9 @@ struct Setting {
           .width('100%')
           .borderRadius(8)
           .height(60)
+          .onClick(() => {
+            this.confirm.open()
+          })
       }
       .width('100%')
       .margin({ top: 20 })
@@ -37,3 +67,4 @@ struct Setting {
     .height('100%').backgroundColor($r('app.color.background_page'))
   }
 }
+

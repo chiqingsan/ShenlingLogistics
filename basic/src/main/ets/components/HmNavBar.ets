@@ -3,7 +3,7 @@ import router from '@ohos.router';
 @Preview
 @Component
 struct HmNavBar {
-  title: string = "个人中心"
+  title: string = "默认文本"
   showBackIcon: boolean = true
 
   build() {
