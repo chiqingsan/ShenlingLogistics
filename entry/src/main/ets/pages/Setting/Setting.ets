@@ -1,4 +1,4 @@
-import { HmCard, HmCardItem } from '@hm/basic'
+import { HmCard, HmCardItem, HmNavBar } from '@hm/basic'
 import { router } from '@kit.ArkUI'
 
 @Entry
@@ -6,6 +6,7 @@ import { router } from '@kit.ArkUI'
 struct Setting {
   build() {
     Column() {
+      HmNavBar({ title: "系统设置" })
       HmCard() {
         HmCardItem({ leftTitle: '换绑手机', rightText: '' })
         HmCardItem({ leftTitle: '修改密码', rightText: '' })
@@ -24,9 +25,10 @@ struct Setting {
           .width('100%')
           .borderRadius(8)
           .height(60)
-      }.width('100%').margin({
-        top: 20
-      }).padding({
+      }
+      .width('100%')
+      .margin({ top: 20 })
+      .padding({
         left: 15,
         right: 15
       })

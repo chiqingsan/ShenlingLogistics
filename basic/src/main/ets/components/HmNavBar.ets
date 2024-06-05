@@ -1,12 +1,13 @@
 import router from '@ohos.router';
+
 @Preview
 @Component
 struct HmNavBar {
-  title: string = "测试个人中心"
+  title: string = "个人中心"
   showBackIcon: boolean = true
 
   build() {
-    Stack({ alignContent: Alignment.TopStart }) {
+    Stack({ alignContent: Alignment.Start }) {
       Row() {
         if (this.title) {
           Text(this.title).fontColor($r('app.color.text_primary')).fontSize(18).fontWeight(600)
