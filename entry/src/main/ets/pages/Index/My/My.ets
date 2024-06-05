@@ -1,6 +1,7 @@
 import { HmCard, HmCardItem } from '@hm/basic/Index'
 import { UserInfo, UserInfoModel, UserTaskInfo, UserTaskInfoModel, UserTaskInfoParamsModel } from '../../../models'
 import { getUserInfo, getUserTaskInfo } from '../../../api/user'
+import { router } from '@kit.ArkUI'
 
 @Entry
 @Component
@@ -121,7 +122,10 @@ struct My {
       HmCard() {
         HmCardItem({ leftTitle: '车辆信息', rightText: '' })
         HmCardItem({ leftTitle: '任务设置', rightText: '' })
-        HmCardItem({ leftTitle: '系统设置', rightText: '', showBottomBorder: false })
+        HmCardItem({ leftTitle: '系统设置', rightText: '', showBottomBorder: false ,
+          onRightClick: () => {
+            router.pushUrl({ url: "pages/Setting/Setting" })
+          }})
       }
 
     }.width('100%').height('100%').backgroundColor($r('app.color.background_page')).borderRadius(8)

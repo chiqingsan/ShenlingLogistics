@@ -1,10 +1,12 @@
 @Component
 struct HmCardItem {
-  onRightClick: () => void = () => {}
   leftTitle: string = ''
   showBottomBorder: boolean = true
   showRightIcon: boolean = true
   @Prop rightText: string
+
+  onRightClick: () => void = () => {
+  }
 
   build() {
     Row() {
@@ -16,9 +18,7 @@ struct HmCardItem {
         if (this.showRightIcon) {
           Image($r("app.media.ic_btn_more")).width(24).height(24)
         }
-      }.onClick(() => {
-        this.onRightClick()
-      })
+      }
     }
     .justifyContent(FlexAlign.SpaceBetween)
     .alignItems(VerticalAlign.Center)
@@ -30,6 +30,9 @@ struct HmCardItem {
     })
     .width('100%')
     .height(60)
+    .onClick(() => {
+      this.onRightClick()
+    })
   }
 }
 

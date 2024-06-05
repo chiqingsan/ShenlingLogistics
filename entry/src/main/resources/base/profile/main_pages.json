@@ -3,6 +3,7 @@
     "pages/Index/Index",
     "pages/Start/Start",
     "pages/Login/Login",
-    "pages/Index/My/My"
+    "pages/Index/My/My",
+    "pages/Setting/Setting"
   ]
 }
