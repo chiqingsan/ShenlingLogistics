@@ -193,6 +193,32 @@ struct TaskDetail {
     HmUpload({ title: '请拍照上传货品照片' })
   }
 
+  // 底部按钮结构
+  @Builder
+  getBottomBtn() {
+    //已完成不显示任何按钮
+    Row() {
+      Button("延迟收货", { type: ButtonType.Capsule })
+        .backgroundColor($r('app.color.btn_gray'))
+        .fontColor($r('app.color.text_primary'))
+        .fontSize(16)
+        .height(50)
+        .width(125)
+      Button("提货", { type: ButtonType.Capsule })
+        .backgroundColor($r('app.color.primary_disabled'))
+        .fontColor($r('app.color.white'))
+        .height(50)
+        .flexGrow(1)
+        .margin({ left: 13 })
+    }
+    .width('100%')
+    .padding({ left: 15, right: 15 })
+    .height(70)
+    .justifyContent(FlexAlign.SpaceBetween)
+    .alignItems(VerticalAlign.Center)
+    .backgroundColor($r('app.color.white'))
+  }
+
   build() {
     Column() {
       HmNavBar({ title: '任务详情' })
@@ -220,6 +246,8 @@ struct TaskDetail {
         .layoutWeight(1)
       }
       .scrollBar(BarState.Off)
+
+      this.getBottomBtn()
     }.backgroundColor($r('app.color.background_page')).height('100%')
   }
 }
