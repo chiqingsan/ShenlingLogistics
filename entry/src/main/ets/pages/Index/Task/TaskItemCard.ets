@@ -92,6 +92,7 @@ struct TaskItemCard {
             .fontColor($r("app.color.gray_10"))
             .fontSize(14)
           Text(this.taskItemData.endAddress)
+            .width("95%")
             .fontColor($r("app.color.gray_10"))
             .fontSize(14)
         }
