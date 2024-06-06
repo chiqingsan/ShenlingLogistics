@@ -6,6 +6,7 @@ import { router } from '@kit.ArkUI'
 @Entry
 @Component
 struct My {
+  @StorageProp("topHeight") topHeight: number = 0
   @StorageProp("userInfo") userInfo: UserInfoModel = new UserInfoModel({} as UserInfo)
   @Consume @Watch("getUserInfo") currentName: string
   @State userTaskInfo: UserTaskInfoModel = new UserTaskInfoModel({} as UserTaskInfo)

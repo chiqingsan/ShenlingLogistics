@@ -1,4 +1,4 @@
-import { TabClass } from '@hm/basic'
+import { TabClass, windowManager } from '@hm/basic'
 import My from './My/My'
 import { getUserInfo } from '../../api/user'
 import TaskTabs from './Task/TaskTabs'
@@ -23,7 +23,16 @@ struct Index {
   @Provide currentName: string = ""
 
   async aboutToAppear(): Promise<void> {
+    // 开始沉浸式状态栏
     AppStorage.setOrCreate("userInfo", await getUserInfo())
+  }
+
+  onPageShow(): void {
+    windowManager.enableFullScreen(true)
+  }
+
+  onPageHide(): void {
+    windowManager.enableFullScreen(false)
   }
 
   updateName() {
@@ -60,6 +69,7 @@ struct Index {
       })
     }
     .scrollable(false)
+    .padding({ bottom: 25 })
     .onTabBarClick((index) => {
       this.currentIndex = index
     })

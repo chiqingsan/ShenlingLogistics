@@ -4,6 +4,7 @@ import TaskList from './TaskList'
 @Preview
 @Component
 struct TaskTabs {
+  @StorageProp("topHeight") topHeight: number = 0
   tabController: TabsController = new TabsController()
   @State tabsData: TabClass[] = [{
     name: 'waiting',
@@ -74,6 +75,7 @@ struct TaskTabs {
       .backgroundColor($r("app.color.white"))
 
     }
+    .padding({ top: this.topHeight })
   }
 }
 
