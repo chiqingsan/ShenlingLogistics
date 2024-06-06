@@ -19,21 +19,24 @@ struct TaskList {
   @State
   allPage: number = 1 // 默认只有一页
 
-  async getTaskList() {
+  async getTaskList(append: boolean = true) {
     const result = await getTaskList(this.queryParams)
-    // 追加数据
-    // this.taskListData = this.taskListData.concat(result.items) // 拿到返回的数组
-    this.taskListData.push(...result.items) // 延展运算符的写法
-    this.allPage = result.pages // 总页数
-    this.queryParams.page++ // 下次请求的页码
+    if (append) {
+      this.taskListData.push(...result.items)
+    } else {
+      this.taskListData = result.items
+    }
+
+    this.allPage = result.pages
+    this.queryParams.page++
   }
 
   async refreshTheTaskList() {
     // 重置页数为1
     this.queryParams.page = 1
     // 请求新的列表数据
-    const result = await getTaskList(this.queryParams)
-    this.taskListData = result.items
+    this.queryParams.page = 1 // 重置第一页
+    await this.getTaskList(false) // 直接赋值
   }
 
   @Builder
