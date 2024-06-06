@@ -2,6 +2,9 @@ import { promptAction } from '@kit.ArkUI'
 
 @Component
 struct HmList {
+  // 记录当前下拉状态
+  @State
+  refreshStatus: RefreshStatus = RefreshStatus.Inactive
   @State
   refreshIng: boolean = false // 控制下拉刷新的变量
   // 传入数据的数组 根据数组进行渲染
@@ -22,6 +25,37 @@ struct HmList {
   // 下拉刷新方法
   onRefresh: () => Promise<void> = async () => {
   } // 下拉刷新的方法
+
+  // 动态生成文本
+  getStatusText() {
+    switch (this.refreshStatus) {
+      case RefreshStatus.Inactive:
+        return ""
+      case RefreshStatus.Drag:
+        return "继续下拉"
+      case RefreshStatus.OverDrag:
+        return "松手加载"
+      case RefreshStatus.Refresh:
+        return "加载中"
+    }
+    return ""
+  }
+
+  @Builder
+  getRefreshDisPlay() {
+    Row({ space: 10 }) {
+      LoadingProgress()
+        .color($r('app.color.primary'))
+        .width(40)
+        .height(40)
+      Text(this.getStatusText())
+        .fontColor($r('app.color.text_secondary'))
+        .fontSize(14)
+    }
+    .justifyContent(FlexAlign.Center)
+    .height(50)
+    .width('100%')
+  }
 
   @Builder
   getBottomDisplay() {
@@ -48,7 +82,7 @@ struct HmList {
   }
 
   build() {
-    Refresh({ refreshing: $$this.refreshIng }) {
+    Refresh({ refreshing: $$this.refreshIng, builder: this.getRefreshDisPlay }) {
       List() {
         ForEach(this.dataSource, (item: object) => {
           // 每一项的结构的UI内容不是由列表决定 而由使用者决定
@@ -81,6 +115,7 @@ struct HmList {
 
     }
     .onStateChange(async (state) => {
+      this.refreshStatus = state
       // 实现下拉刷新
       if (state === RefreshStatus.Refresh) {
         // 松手加载
