@@ -29,8 +29,8 @@ struct TaskList {
     List() {
       ForEach(
         this.taskListData,
-        (item: TaskListParamsModel) => {
-          TaskItemCard()
+        (item: TaskInfoItem) => {
+          TaskItemCard({ taskItemData: item })
         }
       )
     }

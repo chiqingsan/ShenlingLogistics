@@ -1,12 +1,15 @@
+import { TaskInfoItem, TaskInfoItemModel } from '../../../models'
+
 @Preview
 @Component
 struct TaskItemCard {
   isDelay: boolean = false
+  taskItemData: TaskInfoItemModel = new TaskInfoItemModel({} as TaskInfoItem)
 
   build() {
     Column() {
       Row() {
-        Text(`任务编号：213893928399283924`)
+        Text(`任务编号：${this.taskItemData.transportTaskId}`)
           .fontSize(16)
           .fontColor("#2A2929")
           .fontWeight(500)
@@ -63,11 +66,11 @@ struct TaskItemCard {
         .alignItems(HorizontalAlign.Center)
 
         Column() {
-          Text("北京市昌平区回龙观街道西三旗桥东金燕龙写字楼8877号")
+          Text(this.taskItemData.startAddress)
             .width("95%")
             .fontColor($r("app.color.gray_10"))
             .fontSize(14)
-          Text("河南省郑州市路北区北清路99号")
+          Text(this.taskItemData.endAddress)
             .fontColor($r("app.color.gray_10"))
             .fontSize(14)
         }
@@ -91,7 +94,7 @@ struct TaskItemCard {
       Row() {
         Column() {
           Text('提货时间').fontSize(14).fontColor($r('app.color.text_secondary'))
-          Text("2022.05.04 13:00")
+          Text(this.taskItemData.planDepartureTime)
             .fontSize(14)
             .fontColor($r('app.color.text_secondary'))
             .margin({ top: 4 })
