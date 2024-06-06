@@ -32,7 +32,7 @@ struct TaskTabs {
           bottom: 10
         })
       Divider()
-        .strokeWidth(4)
+        .strokeWidth(4)//
         .color($r('app.color.primary'))
         .lineCap(LineCapStyle.Round)
         .width(this.tabsData[this.currentIndex].name === item.name ? 23 : 0)

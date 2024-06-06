@@ -18,7 +18,6 @@ struct TaskList {
   async getTaskList() {
     try {
       const result = await getTaskList(this.queryParams)
-      AlertDialog.show({ message: JSON.stringify(result, null, 2) })
       this.taskListData = result.items
     } catch (e) {
       console.log("TaskList_e:", JSON.stringify(e))

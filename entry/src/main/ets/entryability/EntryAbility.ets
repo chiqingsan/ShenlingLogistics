@@ -2,6 +2,7 @@ import { AbilityConstant, errorManager, UIAbility, Want } from '@kit.AbilityKit'
 import { FaultLogger, hilog } from '@kit.PerformanceAnalysisKit';
 import { promptAction, window } from '@kit.ArkUI';
 import { AdvertClass, TOKEN_KEY, UserSettingClass } from '@hm/basic'
+import { Log } from '@abner/log';
 
 let errorManagerId = -1
 
@@ -22,6 +23,16 @@ export default class EntryAbility extends UIAbility {
           message: "出现未知错误"
         })
       }
+    })
+
+    // 初始化第三方日志模块
+    Log.init({
+      tag: "ShenLing",
+      domain: 0x0000,
+      close: false,
+      isHilog: true,
+      showLogLocation: true,
+      logSize: 1024
     })
   }
 
