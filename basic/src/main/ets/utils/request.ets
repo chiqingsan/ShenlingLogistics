@@ -18,17 +18,19 @@ async function requestHttp<T>(url: string = "", method: http.RequestMethod = htt
   if (method === http.RequestMethod.GET) {
     // data参数都拼接到地址上  ?a=1&b=2&c=3
     if (data && Object.keys(data).length) {
-      urlStr += "?" + Object.keys(data).map(key => {
+      urlStr += "?" + Object.keys(data).filter(key =>!!data[key]).map(key => {
         return `${key}=${data[key]}`
       }).join("&")
     }
   }
   // 组装参数
+  const token = AppStorage.get(TOKEN_KEY) || ""
+  console.debug("request_token:", JSON.stringify(token))
   const config: http.HttpRequestOptions = {
     extraData: method !== http.RequestMethod.GET ? data : "", // 当请求类型不等于get时 复制
     header: {
       "Content-Type": "application/json",
-      Authorization: AppStorage.get(TOKEN_KEY) || "", // 设置请求头的token 每个接口都有
+      Authorization: token, // 设置请求头的token 每个接口都有
     },
     method,
     readTimeout: 10000 // 如果多少秒没响应就断开
@@ -58,13 +60,14 @@ async function requestHttp<T>(url: string = "", method: http.RequestMethod = htt
     } else {
       // 假设已经成功 此时不一定成功哦  还有业务状态码呢 只有业务状态码 200的时候才成功
       const res = JSON.parse(result.result as string) as ResponseData<T> // { code, data, msg }
+      console.log("request_res:", JSON.stringify(res))
       if (res.code === 200) {
         // 才认为这次请求真的成功了
         return res.data as T
       } else {
         // 业务错了
         promptAction.showToast({ message: "服务器异常" }) //  res.msg没处理好 有可能出来一堆服务器语言
-        return Promise.reject(new Error(res.msg)) // 业务错误 请求终止
+        return Promise.reject(res) // 业务错误 请求终止
       }
     }
   } catch (error) {

@@ -1,7 +1,7 @@
 import { TOKEN_KEY, UserSettingClass } from '@hm/basic/Index'
-import { login } from '../../api/user'
 import { LoginFormModel } from '../../models'
 import { router } from '@kit.ArkUI'
+import { login } from '../../api'
 
 @Entry
 @Component
