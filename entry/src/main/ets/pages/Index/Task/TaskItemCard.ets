@@ -6,6 +6,14 @@ struct TaskItemCard {
   isDelay: boolean = false
   taskItemData: TaskInfoItemModel = new TaskInfoItemModel({} as TaskInfoItem)
 
+  // 获取按钮是否可提货
+  getBtnEnable() {
+    if (this.taskItemData.enablePickUp) {
+      return true
+    }
+    return false
+  }
+
   build() {
     Column() {
       Row() {
@@ -100,12 +108,13 @@ struct TaskItemCard {
             .margin({ top: 4 })
         }.alignItems(HorizontalAlign.Start)
 
-        Button("提货")
-          .backgroundColor(1 ? $r('app.color.primary') : $r('app.color.primary_disabled'))
+        Button("提货", { type: ButtonType.Capsule })
+          .backgroundColor($r('app.color.btn_red'))
           .fontColor($r("app.color.white"))
           .fontSize(14)
           .height(32)
-          .width(80)// .enabled(this.getBtnEnable())
+          .width(80)//
+          .enabled(this.getBtnEnable())
           .onClick(() => {
             // this.toPickUp()
           })
