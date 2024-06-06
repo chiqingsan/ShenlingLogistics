@@ -6,7 +6,7 @@
   "author": "",
   "license": "",
   "dependencies": {
-    "@hm/basic":"file:../basic"
+    "@hm/basic": "file:../basic"
   }
 }
 
