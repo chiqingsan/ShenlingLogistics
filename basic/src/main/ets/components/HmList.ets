@@ -62,14 +62,20 @@ struct HmList {
           this.getBottomDisplay()
         }
       }
+      .height("100%")
+      .width("100%")
+      .scrollBar(BarState.Off)
       .onReachEnd(async () => {
         // 实现上拉加载
         // 需要一个标记 是否已经加载完所有数据
         // 在没有加载完所有页数据的情况 且没有请求在进程中的情况下
         if (!this.finished && !this.loading) {
+
           this.loading = true // 关闭阀门
           await this.onLoad() // 实现上拉加载
-          this.loading = false // 打开阀门
+          animateTo({ duration: 300 }, () => {
+            this.loading = false // 打开阀门
+          })
         }
       })
 
@@ -79,10 +85,10 @@ struct HmList {
       if (state === RefreshStatus.Refresh) {
         // 松手加载
         await this.onRefresh() // 调用刷新方法
+
         this.refreshIng = false // 关闭下拉的动画效果
         this.loading = false // 关闭上拉刷新的loading
         // 下拉刷新意味着所有数据全都不要 重新来过
-
       }
     })
 

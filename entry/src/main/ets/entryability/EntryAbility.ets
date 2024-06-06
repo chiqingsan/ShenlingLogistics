@@ -22,6 +22,8 @@ export default class EntryAbility extends UIAbility {
         promptAction.showToast({
           message: "出现未知错误"
         })
+        // 打印错误日志
+        Log.error(errorInfo)
       }
     })
 
