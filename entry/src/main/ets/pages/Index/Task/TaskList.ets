@@ -1,5 +1,6 @@
 import { getTaskList } from '../../../api'
 import { TaskInfoItem, TaskListParams, TaskListParamsModel, TaskTypeEnum } from '../../../models'
+import TaskItemCard from './TaskItemCard'
 
 @Preview
 @Component
@@ -25,7 +26,15 @@ struct TaskList {
   }
 
   build() {
-    Text(JSON.stringify(this.taskListData))
+    List() {
+      ForEach(
+        this.taskListData,
+        (item: TaskListParamsModel) => {
+          TaskItemCard()
+        }
+      )
+    }
+    .scrollBar(BarState.Off)
   }
 }
 
