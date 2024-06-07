@@ -1,4 +1,4 @@
-import { HmNavBar, HmCard, HmCardItem, CommonRouterParams, HmCheckBox, HmLoading } from '@hm/basic'
+import { HmNavBar, HmCard, HmCardItem, CommonRouterParams, HmCheckBox, HmLoading, DateFormat } from '@hm/basic'
 import { CarRecordType, CarRecordTypeModel, TaskDetailInfo, TaskDetailInfoModel } from '../../models'
 import { promptAction, router } from '@kit.ArkUI'
 import { carRecord, getTaskDetail } from '../../api'
@@ -28,7 +28,7 @@ struct CarRecord {
 
   // 回车时间
   endTime(value: Date) {
-    const enterTime = value.toJSON().split(".")[0].split("T").join(" ")
+    const enterTime = DateFormat(value)
     this.enterTime = enterTime
     this.carRecord.endTime = enterTime
   }

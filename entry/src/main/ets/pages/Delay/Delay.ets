@@ -1,4 +1,4 @@
-import { HmNavBar, HmCard, HmCardItem, CommonRouterParams } from '@hm/basic'
+import { HmNavBar, HmCard, HmCardItem, CommonRouterParams, DateFormat } from '@hm/basic'
 import { DelayParamsType, DelayParamsTypeModel } from '../../models'
 import { router } from '@kit.ArkUI'
 
@@ -23,7 +23,18 @@ struct Delay {
       HmNavBar({ title: '延迟提货' })
       HmCard() {
         HmCardItem({ leftTitle: '原定时间', rightText: this.oldTime, showRightIcon: false })
-        HmCardItem({ leftTitle: '延迟时间', rightText: '' })
+        HmCardItem({
+          leftTitle: '延迟时间', rightText: this.delayForm.delayTime || '',
+          onRightClick: () => {
+            DatePickerDialog.show({
+              useMilitaryTime: true,
+              showTime: true,
+              onDateAccept: (value) => {
+                this.delayForm.delayTime = DateFormat(value)
+              }
+            })
+          }
+        })
         TextArea({ placeholder: '请输入延迟提货原因' })
           .backgroundColor($r('app.color.background_page'))
           .margin({
