@@ -17,20 +17,14 @@ struct TaskItemCard {
 
   // 去提货
   toPickUp() {
-    // if (this.getBtnEnable()) {
-    //   router.pushUrl({
-    //     url: 'pages/TaskDetail/TaskDetail',
-    //     params: {
-    //       id: this.taskItemData.id
-    //     }
-    //   })
-    // }
-    router.pushUrl({
-      url: 'pages/TaskDetail/TaskDetail',
-      params: {
-        id: this.taskItemData.id
-      }
-    })
+    if (this.getBtnEnable()) {
+      router.pushUrl({
+        url: 'pages/TaskDetail/TaskDetail',
+        params: {
+          id: this.taskItemData.id
+        }
+      })
+    }
   }
 
   build() {
@@ -133,7 +127,8 @@ struct TaskItemCard {
           .fontColor($r("app.color.white"))
           .fontSize(14)
           .height(32)
-          .width(80)// .enabled(this.getBtnEnable())
+          .width(80)
+            .enabled(this.getBtnEnable())
           .onClick(() => {
             this.toPickUp()
           })

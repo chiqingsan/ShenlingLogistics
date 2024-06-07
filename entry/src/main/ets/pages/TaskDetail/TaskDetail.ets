@@ -1,4 +1,4 @@
-import { HmNavBar, CommonRouterParams, HmToggleCard, HmUpload, ImageList, UploadFile } from '@hm/basic'
+import { HmNavBar, CommonRouterParams, HmToggleCard, HmUpload, ImageList, UploadFile, HmLoading } from '@hm/basic'
 import { promptAction, router } from '@kit.ArkUI'
 import { PickUpParamsModel, TaskDetailInfo, TaskDetailInfoModel } from '../../models'
 import { getTaskDetail, pickUp } from '../../api'
@@ -16,6 +16,10 @@ class BaseBuilderClass {
 struct TaskDetail {
   @State taskDetailData: TaskDetailInfoModel = new TaskDetailInfoModel({} as TaskDetailInfo)
   scroller: Scroller = new Scroller()
+  loading: CustomDialogController = new CustomDialogController({
+    builder: HmLoading(),
+    customStyle: true
+  })
 
   aboutToAppear() {
     const params = router.getParams() as CommonRouterParams
@@ -25,7 +29,9 @@ struct TaskDetail {
   }
 
   async getTaskDetail(id: string) {
+    this.loading.open()
     this.taskDetailData = await getTaskDetail(id)
+    this.loading.close()
     Log.log(this.taskDetailData)
   }
 
@@ -40,6 +46,7 @@ struct TaskDetail {
   // 去提货
   async btnPickUp() {
     try {
+      this.loading.open()
       const cargoPickUpPictureList = await UploadFile(this.taskDetailData.cargoPickUpPictureList) // 传入提货凭证
       const cargoPictureList = await UploadFile(this.taskDetailData.cargoPictureList) // 货品照片
       // 提货操作
@@ -57,6 +64,9 @@ struct TaskDetail {
       promptAction.showToast({ message: '提货成功' })
     } catch (e) {
       Log.error(e)
+    } finally {
+      // 不管上传成功还是失败,都关闭弹窗
+      this.loading.close()
     }
 
   }
@@ -316,3 +326,4 @@ function baseTextOneStyle() {
 function baseTextTwoStyle() {
   .margin({ left: 11.5 }).fontColor($r('app.color.text_secondary')).fontSize(14).lineHeight(20)
 }
+
