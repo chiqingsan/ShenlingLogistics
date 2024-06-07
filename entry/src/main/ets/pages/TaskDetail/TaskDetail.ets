@@ -266,6 +266,7 @@ struct TaskDetail {
   getPickUpContent() {
     HmUpload({
       title: '请拍照上传货品凭证',
+      canUpload: this.taskDetailData.status === TaskTypeEnum.Waiting,
       imgList: this.taskDetailData.cargoPickUpPictureList || [],
       onListChange: (list: ImageList[]) => {
         this.taskDetailData.cargoPickUpPictureList = list
@@ -273,6 +274,7 @@ struct TaskDetail {
     })
     HmUpload({
       title: '请拍照上传货品照片',
+      canUpload: this.taskDetailData.status === TaskTypeEnum.Waiting,
       imgList: this.taskDetailData.cargoPictureList || [],
       onListChange: (list: ImageList[]) => {
         this.taskDetailData.cargoPictureList = list
@@ -320,6 +322,15 @@ struct TaskDetail {
             this.btnDeliver()
           })
 
+      } else if (this.taskDetailData.status === TaskTypeEnum.Delivered) {
+        Row() {
+          // 已交付显示回车登记
+          Button("回车登记", { type: ButtonType.Capsule })
+            .backgroundColor($r('app.color.primary'))
+            .fontColor($r('app.color.white'))
+            .height(50)
+            .width('80%')
+        }.width('100%').justifyContent(FlexAlign.Center)
       }
 
     }
@@ -336,6 +347,7 @@ struct TaskDetail {
   getDeliverContent() {
     HmUpload({
       title: '请拍照上传交货货品凭证',
+      canUpload: this.taskDetailData.status === TaskTypeEnum.Line,
       imgList: this.taskDetailData.deliverPictureList || [],
       onListChange: (list: ImageList[]) => {
         this.taskDetailData.deliverPictureList = list
@@ -343,6 +355,7 @@ struct TaskDetail {
     })
     HmUpload({
       title: '请拍照上传交货货品照片',
+      canUpload: this.taskDetailData.status === TaskTypeEnum.Line,
       imgList: this.taskDetailData.certificatePictureList || [],
       onListChange: (list: ImageList[]) => {
         this.taskDetailData.certificatePictureList = list
@@ -375,15 +388,6 @@ struct TaskDetail {
             HmToggleCard({ title: '交货信息' }) {
               this.getDeliverContent()
             }
-          } else if (this.taskDetailData.status === TaskTypeEnum.Delivered) {
-            Row() {
-              // 已交付显示回车登记
-              Button("回车登记", { type: ButtonType.Capsule })
-                .backgroundColor($r('app.color.primary'))
-                .fontColor($r('app.color.white'))
-                .height(50)
-                .width('80%')
-            }.width('100%').justifyContent(FlexAlign.Center)
           }
         }
         .padding({

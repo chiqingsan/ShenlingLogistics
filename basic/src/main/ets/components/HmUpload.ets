@@ -33,6 +33,7 @@ const UploadFile = async (list: ImageList[]) => {
 @Preview
 @Component
 struct HmUpload {
+  @Prop canUpload: boolean = true
   title: string = ""
   maxNum: number = 3
   index: number = -1
@@ -84,11 +85,13 @@ struct HmUpload {
                   this.index = index
                   this.preview.open()
                 })
-              Image($r('app.media.ic_btn_delete')).width(30).height(30)
-                .onClick(() => {
-                  this.imgList.splice(index, 1) // 移除索引
-                  this.onListChange(this.imgList) // 通知父组件更新
-                })
+              if (this.canUpload) {
+                Image($r('app.media.ic_btn_delete')).width(30).height(30)
+                  .onClick(() => {
+                    this.imgList.splice(index, 1) // 移除索引
+                    this.onListChange(this.imgList) // 通知父组件更新
+                  })
+              }
             }.margin({ right: 15, bottom: 10 })
           }
           .onClick(() => {
@@ -96,7 +99,7 @@ struct HmUpload {
             this.preview.open()
           })
         })
-        if (this.imgList.length < this.maxNum) {
+        if (this.imgList.length < this.maxNum && this.canUpload) {
           GridItem() {
             Row() {
               Image($r("app.media.ic_add_img")).width(30).height(30)
