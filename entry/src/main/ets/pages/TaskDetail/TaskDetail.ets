@@ -44,6 +44,14 @@ struct TaskDetail {
     this.taskDetailData.cargoPictureList.every(item =>!!item.url)
   }
 
+  // 获取交货状态
+  getDeliverState() {
+    return this.taskDetailData.deliverPictureList?.length > 0 &&
+      this.taskDetailData.certificatePictureList?.length > 0
+      && this.taskDetailData.deliverPictureList.every(item =>!!item.url)
+      && this.taskDetailData.certificatePictureList.every(item =>!!item.url)
+  }
+
   // 去提货
   async btnPickUp() {
     try {
@@ -277,12 +285,13 @@ struct TaskDetail {
           .fontSize(16)
           .height(50)
           .width(125)
-        Button("交货", { type: ButtonType.Capsule })
+        Button("交付", { type: ButtonType.Capsule })
           .backgroundColor($r('app.color.primary'))
           .fontColor($r('app.color.white'))
           .height(50)
           .flexGrow(1)
           .margin({ left: 13 })
+          .enabled(this.getDeliverState())
 
       }
 
