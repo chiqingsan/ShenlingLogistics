@@ -95,6 +95,9 @@ struct TaskDetail {
       this.scroller.scrollEdge(Edge.Top)
       // 滚动到顶部
       promptAction.showToast({ message: '提货成功' })
+      // 返回任务列表页面,并且刷新数据
+      router.clear()
+      router.replaceUrl({ url: "pages/Index/Index" })
     } catch (e) {
       Log.error(e)
     } finally {

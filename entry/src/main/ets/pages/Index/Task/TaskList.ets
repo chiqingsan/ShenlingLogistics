@@ -6,6 +6,7 @@ import TaskItemCard from './TaskItemCard'
 // 待提货
 @Component
 struct TaskList {
+  @Prop index: number = 0
   @State
   queryParams: TaskListParamsModel = new TaskListParamsModel(
     {
@@ -18,6 +19,11 @@ struct TaskList {
   taskListData: TaskInfoItem[] = []
   @State
   allPage: number = 1 // 默认只有一页
+
+  aboutToAppear(): void {
+    // 页面创建的时候就刷新一次数据
+    this.refreshTheTaskList()
+  }
 
   async getTaskList(append: boolean = true) {
     const result = await getTaskList(this.queryParams)

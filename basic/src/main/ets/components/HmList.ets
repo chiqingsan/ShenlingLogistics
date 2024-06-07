@@ -1,5 +1,3 @@
-import { promptAction } from '@kit.ArkUI'
-
 @Component
 struct HmList {
   // 记录当前下拉状态

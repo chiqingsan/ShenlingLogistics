@@ -55,14 +55,17 @@ struct TaskTabs {
         ForEach(this.tabsData, (item: TabClass) => {
           TabContent() {
             if (item.name === "waiting") {
-              TaskList()
+              TaskList({
+                index:this.currentIndex
+              })
             } else if (item.name === 'line') {
               TaskList({
                 queryParams: new TaskListParamsModel({
                   page: 1,
                   pageSize: 5,
                   status: TaskTypeEnum.Line
-                } as TaskListParams)
+                } as TaskListParams),
+                index:this.currentIndex
               })
             } else {
               Text(item.title)
