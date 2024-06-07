@@ -7,8 +7,8 @@ import { router } from '@kit.ArkUI'
 struct Delay {
   @State
   delayForm: DelayParamsTypeModel = new DelayParamsTypeModel({} as DelayParamsType)
-  @State
-  oldTime: string = ""
+  @State oldTime: string = ""
+  @State maxSizeNumber: number = 50
 
   aboutToAppear() {
     const params = router.getParams() as CommonRouterParams
@@ -44,7 +44,10 @@ struct Delay {
           .height(130)
           .placeholderColor($r('app.color.text_secondary'))
           .fontSize(14)
-        Text('0/50')
+          .onChange((value) => {
+            this.delayForm.delayReason = value
+          })
+        Text(`${this.delayForm.delayReason?.length || 0}/${this.maxSizeNumber}`)
           .margin({
             top: -30
           })
