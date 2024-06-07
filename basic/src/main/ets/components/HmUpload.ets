@@ -4,9 +4,10 @@ import { ImageList } from '../models';
 import { promptAction } from '@kit.ArkUI';
 import { util } from '@kit.ArkTS';
 import { request } from '@kit.BasicServicesKit';
+import { uploadImage } from '../utils/upload';
 
 // 上传方法
-const UploadFile = (list: ImageList[]) => {
+const UploadFile = async (list: ImageList[]) => {
   // 因为上传文件只能从沙箱文件中拷贝所以 我们需要把传过来的所有的图片拷贝到沙箱
   const saveDir = getContext().cacheDir // 存储的目录
   const fileParams: request.File[] = [] // 要提交的参数
@@ -25,8 +26,8 @@ const UploadFile = (list: ImageList[]) => {
     })
     fileIo.closeSync(file.fd)
   })
-  AlertDialog.show({ message: JSON.stringify(fileParams) })
-
+  // 将参数进行上传
+  return await uploadImage(getContext(), fileParams) // 调用上传接口 // 将上传的结果再返回上一层
 }
 
 @Preview
@@ -108,3 +109,4 @@ struct HmUpload {
 }
 
 export { HmUpload, UploadFile }
+
