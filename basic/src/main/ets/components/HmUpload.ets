@@ -1,7 +1,33 @@
 import { HmPreview } from './HmPreview'
-import { picker } from '@kit.CoreFileKit';
+import { fileIo, picker } from '@kit.CoreFileKit';
 import { ImageList } from '../models';
 import { promptAction } from '@kit.ArkUI';
+import { util } from '@kit.ArkTS';
+import { request } from '@kit.BasicServicesKit';
+
+// 上传方法
+const UploadFile = (list: ImageList[]) => {
+  // 因为上传文件只能从沙箱文件中拷贝所以 我们需要把传过来的所有的图片拷贝到沙箱
+  const saveDir = getContext().cacheDir // 存储的目录
+  const fileParams: request.File[] = [] // 要提交的参数
+  list.forEach(item => {
+    const file = fileIo.openSync(item.url, fileIo.OpenMode.READ_ONLY) // 读取相册的文件
+    // 将文件拷贝到沙箱目录
+    // 相册的地址
+    const uniqueName = util.generateRandomUUID() + ".jpg"
+    fileIo.copyFileSync(file.fd, saveDir + "/" + uniqueName) // 将相册文件拷贝到沙箱
+    // 需要生成参数
+    fileParams.push({
+      filename: uniqueName, // 文件名称
+      name: 'file', // 接口的参数名称
+      type: 'jpg', // 文件后缀
+      uri: `internal://cache/${uniqueName}` // 应该是文件放到cache目录下 如果是cache协议 它会自动找这个文件
+    })
+    fileIo.closeSync(file.fd)
+  })
+  AlertDialog.show({ message: JSON.stringify(fileParams) })
+
+}
 
 @Preview
 @Component
@@ -81,4 +107,4 @@ struct HmUpload {
   }
 }
 
-export { HmUpload }
+export { HmUpload, UploadFile }
