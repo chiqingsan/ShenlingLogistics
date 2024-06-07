@@ -28,7 +28,7 @@ struct TaskList {
   async getTaskList(append: boolean = true) {
     const result = await getTaskList(this.queryParams)
     if (append) {
-      this.taskListData.push(...result.items)
+      this.taskListData.push(...result.items || [])
     } else {
       this.taskListData = result.items
     }
