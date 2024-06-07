@@ -13,3 +13,5 @@ export * from './HmList'
 export * from './HmToggleCard'
 
 export * from './HmUpload'
+
+export * from './HmPreview'

@@ -1,3 +1,4 @@
+import { HmPreview } from './HmPreview'
 import { picker } from '@kit.CoreFileKit';
 import { ImageList } from '../models';
 import { promptAction } from '@kit.ArkUI';
@@ -7,7 +8,15 @@ import { promptAction } from '@kit.ArkUI';
 struct HmUpload {
   title: string = ""
   maxNum: number = 3
+  index: number = -1
   @State imgList: ImageList[] = []
+  preview: CustomDialogController = new CustomDialogController({
+    builder: HmPreview({
+      urls: this.imgList.map(item => item.url),
+      selectIndex: this.index
+    }),
+    customStyle: true, // 自定义样式
+  })
 
   // 弹出相册选择器
   async selectImage() {
@@ -34,13 +43,17 @@ struct HmUpload {
         bottom: 16
       })
       Grid() {
-        ForEach(this.imgList, (item: ImageList) => {
+        ForEach(this.imgList, (item: ImageList, index) => {
           GridItem() {
             Image(item.url)
               .width(95)
               .height(95)
               .borderRadius(4)
           }
+          .onClick(() => {
+            this.index = index
+            this.preview.open()
+          })
         })
         if (this.imgList.length < this.maxNum) {
           GridItem() {
