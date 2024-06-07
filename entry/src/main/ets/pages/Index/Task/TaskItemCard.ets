@@ -147,9 +147,9 @@ struct TaskItemCard {
         Button(this.getBtnText(), { type: ButtonType.Capsule })
           .backgroundColor($r('app.color.btn_red'))
           .fontColor($r("app.color.white"))
-          .fontSize(14)
-          .height(32)
-          .width(80)
+          .fontSize(13)
+          .height(35)
+          .width(85)
           .enabled(this.getBtnEnable())
           .onClick(() => {
             this.toPickUp()

@@ -1,7 +1,13 @@
 import { HmNavBar, CommonRouterParams, HmToggleCard, HmUpload, ImageList, UploadFile, HmLoading } from '@hm/basic'
 import { promptAction, router } from '@kit.ArkUI'
-import { PickUpParamsModel, TaskDetailInfo, TaskDetailInfoModel, TaskTypeEnum } from '../../models'
-import { getTaskDetail, pickUp } from '../../api'
+import {
+  DeliverParamsTypeModel,
+  PickUpParamsModel,
+  TaskDetailInfo,
+  TaskDetailInfoModel,
+  TaskTypeEnum
+} from '../../models'
+import { deliver, getTaskDetail, pickUp } from '../../api'
 import { Log } from '@abner/log'
 
 class BaseBuilderClass {
@@ -50,6 +56,24 @@ struct TaskDetail {
       this.taskDetailData.certificatePictureList?.length > 0
       && this.taskDetailData.deliverPictureList.every(item =>!!item.url)
       && this.taskDetailData.certificatePictureList.every(item =>!!item.url)
+  }
+
+  // 交货方法
+  async btnDeliver() {
+    this.loading.open()
+    this.taskDetailData.deliverPictureList = await UploadFile(this.taskDetailData.deliverPictureList)
+    this.taskDetailData.certificatePictureList = await UploadFile(this.taskDetailData.certificatePictureList)
+    await deliver(new DeliverParamsTypeModel({
+      id: this.taskDetailData.id,
+      certificatePictureList: this.taskDetailData.certificatePictureList,
+      deliverPictureList: this.taskDetailData.deliverPictureList
+    }))
+    promptAction.showToast({
+      message: '交货成功'
+    })
+    // 重新加载一下
+    this.getTaskDetail(this.taskDetailData.id)
+    this.loading.close()
   }
 
   // 去提货
@@ -292,6 +316,9 @@ struct TaskDetail {
           .flexGrow(1)
           .margin({ left: 13 })
           .enabled(this.getDeliverState())
+          .onClick(() => {
+            this.btnDeliver()
+          })
 
       }
 
@@ -352,7 +379,7 @@ struct TaskDetail {
           }
         }
         .padding({
-          bottom: 20
+          bottom: 15
         })
       }
       .layoutWeight(1)
@@ -378,4 +405,5 @@ function baseTextOneStyle() {
 function baseTextTwoStyle() {
   .margin({ left: 11.5 }).fontColor($r('app.color.text_secondary')).fontSize(14).lineHeight(20)
 }
+
 

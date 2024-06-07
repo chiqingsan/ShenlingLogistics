@@ -1,4 +1,4 @@
-import { PickUpParamsModel, TaskListData, TaskListParams } from '../models'
+import { DeliverParamsTypeModel, PickUpParamsModel, TaskListData, TaskListParams } from '../models'
 import { RequestModels } from '@hm/basic'
 import { TaskDetailInfoModel } from '../models'
 
@@ -16,4 +16,9 @@ export const getTaskDetail = (id: string) => {
 // 提货
 export const pickUp = (data: PickUpParamsModel) => {
   return RequestModels.post<null>("/tasks/takeDelivery", data)
+}
+
+// 交货
+export const deliver = (data: DeliverParamsTypeModel) => {
+  return RequestModels.post<null>("/tasks/deliver", data)
 }
