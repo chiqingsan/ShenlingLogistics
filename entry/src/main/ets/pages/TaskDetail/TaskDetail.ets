@@ -1,4 +1,4 @@
-import { HmNavBar, CommonRouterParams, HmToggleCard, HmUpload } from '@hm/basic'
+import { HmNavBar, CommonRouterParams, HmToggleCard, HmUpload, ImageList } from '@hm/basic'
 import { router } from '@kit.ArkUI'
 import { TaskDetailInfo, TaskDetailInfoModel } from '../../models'
 import { getTaskDetail } from '../../api'
@@ -27,6 +27,14 @@ struct TaskDetail {
   async getTaskDetail(id: string) {
     this.taskDetailData = await getTaskDetail(id)
     Log.log(this.taskDetailData)
+  }
+
+  // 获取提货的状态
+  getPickUpState() {
+    return this.taskDetailData.cargoPickUpPictureList?.length > 0 &&
+      this.taskDetailData.cargoPictureList?.length > 0 &&
+    this.taskDetailData.cargoPickUpPictureList.every(item =>!!item.url) &&
+    this.taskDetailData.cargoPictureList.every(item =>!!item.url)
   }
 
   @Builder
@@ -186,11 +194,23 @@ struct TaskDetail {
     })
   }
 
-  // 提货信息内容
+  // 专门负责提货信息的结构
   @Builder
   getPickUpContent() {
-    HmUpload({ title: '请拍照上传回单凭证' })
-    HmUpload({ title: '请拍照上传货品照片' })
+    HmUpload({
+      title: '请拍照上传货品凭证',
+      imgList: this.taskDetailData.cargoPickUpPictureList || [],
+      onListChange: (list: ImageList[]) => {
+        this.taskDetailData.cargoPickUpPictureList = list
+      }
+    })
+    HmUpload({
+      title: '请拍照上传货品照片',
+      imgList: this.taskDetailData.cargoPictureList || [],
+      onListChange: (list: ImageList[]) => {
+        this.taskDetailData.cargoPictureList = list
+      }
+    })
   }
 
   // 底部按钮结构
@@ -205,11 +225,12 @@ struct TaskDetail {
         .height(50)
         .width(125)
       Button("提货", { type: ButtonType.Capsule })
-        .backgroundColor($r('app.color.primary_disabled'))
+        .backgroundColor(this.getPickUpState() ? $r('app.color.primary') : $r('app.color.primary_disabled'))
         .fontColor($r('app.color.white'))
         .height(50)
         .flexGrow(1)
         .margin({ left: 13 })
+        .enabled(this.getPickUpState())
     }
     .width('100%')
     .padding({ left: 15, right: 15 })
