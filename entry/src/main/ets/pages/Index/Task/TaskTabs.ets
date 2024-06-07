@@ -1,5 +1,6 @@
 import { TabClass } from '@hm/basic'
 import TaskList from './TaskList'
+import { TaskListParams, TaskListParamsModel, TaskTypeEnum } from '../../../models'
 
 @Preview
 @Component
@@ -54,8 +55,17 @@ struct TaskTabs {
         ForEach(this.tabsData, (item: TabClass) => {
           TabContent() {
             if (item.name === "waiting") {
-              // Text(item.title)
               TaskList()
+            } else if (item.name === 'line') {
+              TaskList({
+                queryParams: new TaskListParamsModel({
+                  page: 1,
+                  pageSize: 5,
+                  status: TaskTypeEnum.Line
+                } as TaskListParams)
+              })
+            } else {
+              Text(item.title)
             }
           }.tabBar(item.title)
         })
