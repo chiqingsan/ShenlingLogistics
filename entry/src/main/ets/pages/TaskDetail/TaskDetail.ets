@@ -243,8 +243,8 @@ struct TaskDetail {
         .padding({
           bottom: 50
         })
-        .layoutWeight(1)
       }
+      .layoutWeight(1)
       .scrollBar(BarState.Off)
 
       this.getBottomBtn()

@@ -1,6 +1,22 @@
+import { picker } from '@kit.CoreFileKit';
+
 @Component
 struct HmUpload {
   title: string = ""
+  maxNum: number = 3
+
+  // 弹出相册选择器
+  async selectImage() {
+    let photoPicker = new picker.PhotoViewPicker();
+    const result = await photoPicker.select({
+      MIMEType: picker.PhotoViewMIMETypes.IMAGE_TYPE,
+      maxSelectNumber: this.maxNum
+    })
+    AlertDialog.show({
+      message: JSON.stringify(result.photoUris)
+    })
+  }
+
   build() {
     Column() {
       Text(this.title).fontSize(14).fontColor($r("app.color.text_secondary")).margin({
@@ -15,7 +31,11 @@ struct HmUpload {
       .backgroundColor('#F2F2F2')
       .alignItems(VerticalAlign.Center)
       .justifyContent(FlexAlign.Center)
+      .onClick(() => {
+        this.selectImage()
+      })
     }.alignItems(HorizontalAlign.Start).width('100%')
   }
 }
+
 export { HmUpload }
