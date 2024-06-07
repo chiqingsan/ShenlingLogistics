@@ -371,11 +371,19 @@ struct TaskDetail {
             HmToggleCard({ title: '提货信息' }) {
               this.getPickUpContent()
             }
-          }
-          if (this.taskDetailData.status === TaskTypeEnum.Line) {
+          } else if (this.taskDetailData.status === TaskTypeEnum.Line) {
             HmToggleCard({ title: '交货信息' }) {
               this.getDeliverContent()
             }
+          } else if (this.taskDetailData.status === TaskTypeEnum.Delivered) {
+            Row() {
+              // 已交付显示回车登记
+              Button("回车登记", { type: ButtonType.Capsule })
+                .backgroundColor($r('app.color.primary'))
+                .fontColor($r('app.color.white'))
+                .height(50)
+                .width('80%')
+            }.width('100%').justifyContent(FlexAlign.Center)
           }
         }
         .padding({
