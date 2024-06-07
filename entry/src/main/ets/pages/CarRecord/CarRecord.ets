@@ -2,11 +2,13 @@ import { HmNavBar, HmCard, HmCardItem, CommonRouterParams, HmCheckBox } from '@h
 import { TaskDetailInfo, TaskDetailInfoModel } from '../../models'
 import { router } from '@kit.ArkUI'
 import { getTaskDetail } from '../../api'
+import { Log } from '@abner/log'
 
 @Entry
 @Component
 struct CarRecord {
   @State taskDetailData: TaskDetailInfoModel = new TaskDetailInfoModel({} as TaskDetailInfo)
+  @State enterTime: string = "请选择"
 
   aboutToAppear() {
     const params = router.getParams() as CommonRouterParams
@@ -31,8 +33,18 @@ struct CarRecord {
             })
             HmCardItem({
               leftTitle: '回车时间',
-              rightText: '请选择',
-              showBottomBorder: false
+              rightText: this.enterTime,
+              showBottomBorder: false,
+              onRightClick: () => {
+                DatePickerDialog.show({
+                  showTime: true,
+                  useMilitaryTime: true,
+                  onDateAccept: (value: Date) => {
+                    const enterTime = value.toJSON().split(".")[0].split("T").join(" ")
+                    this.enterTime = enterTime
+                  }
+                })
+              }
             })
           }
 
