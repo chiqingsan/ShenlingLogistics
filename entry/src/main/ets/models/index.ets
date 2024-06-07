@@ -11,3 +11,5 @@ export * from "./pickup"
 export * from "./deliver"
 
 export * from "./car_record"
+
+export * from "./delay"

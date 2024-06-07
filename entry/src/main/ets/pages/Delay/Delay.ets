@@ -1,13 +1,28 @@
-import { HmNavBar, HmCard, HmCardItem } from '@hm/basic'
+import { HmNavBar, HmCard, HmCardItem, CommonRouterParams } from '@hm/basic'
+import { DelayParamsType, DelayParamsTypeModel } from '../../models'
+import { router } from '@kit.ArkUI'
 
 @Entry
 @Component
 struct Delay {
+  @State
+  delayForm: DelayParamsTypeModel = new DelayParamsTypeModel({} as DelayParamsType)
+  @State
+  oldTime: string = ""
+
+  aboutToAppear() {
+    const params = router.getParams() as CommonRouterParams
+    if (params && params.id && params.oldTime) {
+      this.delayForm.id = params.id
+      this.oldTime = params.oldTime
+    }
+  }
+
   build() {
     Column() {
       HmNavBar({ title: '延迟提货' })
       HmCard() {
-        HmCardItem({ leftTitle: '原定时间', rightText: '', showRightIcon: false })
+        HmCardItem({ leftTitle: '原定时间', rightText: this.oldTime, showRightIcon: false })
         HmCardItem({ leftTitle: '延迟时间', rightText: '' })
         TextArea({ placeholder: '请输入延迟提货原因' })
           .backgroundColor($r('app.color.background_page'))
