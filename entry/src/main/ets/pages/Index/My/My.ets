@@ -46,7 +46,7 @@ struct My {
           .lineHeight(25)
           .margin({
             top: 9,
-            bottom: 9
+            bottom: 7
           })
           .fontColor($r('app.color.white'))
         Text(`司机编号: ${this.userInfo.number}`)
@@ -59,19 +59,17 @@ struct My {
           .fontWeight(400)
           .lineHeight(20)
           .margin({
-            top: 10
+            top: 4
           })
           .fontColor($r('app.color.white'))
       }
       .backgroundImage($r("app.media.bg_page_my"))
       .backgroundImageSize(ImageSize.Cover)
+      .backgroundImagePosition({ y: -2 })
       .width('100%')
       .alignItems(HorizontalAlign.Center)
       .justifyContent(FlexAlign.Center)
       .height(292)
-      .margin({
-        top: -2
-      })
 
       // 本月任务
       Column() {
@@ -112,7 +110,7 @@ struct My {
       .margin({
         left: 14.5,
         right: 14.5,
-        top: -55,
+        top: -50,
         bottom: 15
       })
       .height(134)
