@@ -1,4 +1,4 @@
-import { CommonRouterParams, DateFormat, HmCard, HmCardItem, HmNavBar, HmUpload } from '@hm/basic'
+import { CommonRouterParams, DateFormat, HmCard, HmCardItem, HmNavBar, HmSelectCard, HmUpload } from '@hm/basic'
 import { ExceptionParamsType, ExceptionParamsTypeModel } from '../../models'
 import { router } from '@kit.ArkUI'
 
@@ -6,6 +6,21 @@ import { router } from '@kit.ArkUI'
 @Component
 struct ExceptionReport {
   @State exceptionForm: ExceptionParamsTypeModel = new ExceptionParamsTypeModel({} as ExceptionParamsType)
+  // 异常类型弹层
+  typeDialog: CustomDialogController = new CustomDialogController({
+    builder: HmSelectCard({
+      cardContent: () => {
+        this.getCardContent
+      }
+    }),
+    autoCancel: false,
+    customStyle: true,
+    alignment: DialogAlignment.Bottom
+  })
+
+  @Builder
+  getCardContent() {
+  }
 
   aboutToAppear() {
     const params = router.getParams() as CommonRouterParams
@@ -33,7 +48,11 @@ struct ExceptionReport {
               }
             })
             HmCardItem({ leftTitle: '上报位置', rightText: '请选择' })
-            HmCardItem({ leftTitle: '异常类型', rightText: '请选择' })
+            HmCardItem({
+              leftTitle: '异常类型', rightText: '请选择', onRightClick: () => {
+                this.typeDialog.open()
+              }
+            })
             HmCardItem({
               leftTitle: '异常描述',
               rightText: '',
