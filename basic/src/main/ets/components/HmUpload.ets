@@ -75,10 +75,21 @@ struct HmUpload {
       Grid() {
         ForEach(this.imgList, (item: ImageList, index) => {
           GridItem() {
-            Image(item.url)
-              .width(95)
-              .height(95)
-              .borderRadius(4)
+            Stack({ alignContent: Alignment.TopEnd }) {
+              Image(item.url)
+                .width(95)
+                .height(95)
+                .borderRadius(4)
+                .onClick(() => {
+                  this.index = index
+                  this.preview.open()
+                })
+              Image($r('app.media.ic_btn_delete')).width(30).height(30)
+                .onClick(() => {
+                  this.imgList.splice(index, 1) // 移除索引
+                  this.onListChange(this.imgList) // 通知父组件更新
+                })
+            }.margin({ right: 15, bottom: 10 })
           }
           .onClick(() => {
             this.index = index

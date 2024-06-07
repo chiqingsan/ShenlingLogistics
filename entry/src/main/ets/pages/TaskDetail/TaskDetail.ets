@@ -1,7 +1,7 @@
-import { HmNavBar, CommonRouterParams, HmToggleCard, HmUpload, ImageList } from '@hm/basic'
-import { router } from '@kit.ArkUI'
-import { TaskDetailInfo, TaskDetailInfoModel } from '../../models'
-import { getTaskDetail } from '../../api'
+import { HmNavBar, CommonRouterParams, HmToggleCard, HmUpload, ImageList, UploadFile } from '@hm/basic'
+import { promptAction, router } from '@kit.ArkUI'
+import { PickUpParamsModel, TaskDetailInfo, TaskDetailInfoModel } from '../../models'
+import { getTaskDetail, pickUp } from '../../api'
 import { Log } from '@abner/log'
 
 class BaseBuilderClass {
@@ -35,6 +35,30 @@ struct TaskDetail {
       this.taskDetailData.cargoPictureList?.length > 0 &&
     this.taskDetailData.cargoPickUpPictureList.every(item =>!!item.url) &&
     this.taskDetailData.cargoPictureList.every(item =>!!item.url)
+  }
+
+  // 去提货
+  async btnPickUp() {
+    try {
+      const cargoPickUpPictureList = await UploadFile(this.taskDetailData.cargoPickUpPictureList) // 传入提货凭证
+      const cargoPictureList = await UploadFile(this.taskDetailData.cargoPictureList) // 货品照片
+      // 提货操作
+      await pickUp(new PickUpParamsModel({
+        id: this.taskDetailData.id,
+        cargoPickUpPictureList,
+        cargoPictureList
+      }))
+      // 只需要重新获取数据
+      // 重新获取数据
+      this.getTaskDetail(this.taskDetailData.id) // 重新拉取数据
+
+      this.scroller.scrollEdge(Edge.Top)
+      // 滚动到顶部
+      promptAction.showToast({ message: '提货成功' })
+    } catch (e) {
+      Log.error(e)
+    }
+
   }
 
   @Builder
@@ -225,12 +249,16 @@ struct TaskDetail {
         .height(50)
         .width(125)
       Button("提货", { type: ButtonType.Capsule })
-        .backgroundColor(this.getPickUpState() ? $r('app.color.primary') : $r('app.color.primary_disabled'))
+        .backgroundColor($r('app.color.primary'))
         .fontColor($r('app.color.white'))
         .height(50)
         .flexGrow(1)
         .margin({ left: 13 })
         .enabled(this.getPickUpState())
+        .stateEffect(true)
+        .onClick(() => {
+          this.btnPickUp()
+        })
     }
     .width('100%')
     .padding({ left: 15, right: 15 })

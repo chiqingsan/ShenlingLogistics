@@ -3,12 +3,12 @@ import { window } from '@kit.ArkUI'
 
 export class windowManager {
   // 是否开启沉浸式状态栏
-  static enableFullScreen(ison: boolean) {
+  static enableFullScreen(isOn: boolean) {
     window.getLastWindow(getContext())
       .then((win) => {
-        win.setWindowLayoutFullScreen(ison)
+        win.setWindowLayoutFullScreen(isOn)
 
-        if (ison) {
+        if (isOn) {
           // 如果开启,则获取安全区的高度, 转换为vp
           const area = win.getWindowAvoidArea(window.AvoidAreaType.TYPE_SYSTEM)
 
