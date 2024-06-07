@@ -1,4 +1,4 @@
-import { HmNavBar, HmCard, HmCardItem, CommonRouterParams } from '@hm/basic'
+import { HmNavBar, HmCard, HmCardItem, CommonRouterParams, HmCheckBox } from '@hm/basic'
 import { TaskDetailInfo, TaskDetailInfoModel } from '../../models'
 import { router } from '@kit.ArkUI'
 import { getTaskDetail } from '../../api'
@@ -35,6 +35,10 @@ struct CarRecord {
               showBottomBorder: false
             })
           }
+
+          HmCheckBox({ value: false, title: '车辆违章' })
+          HmCheckBox({ value: false, title: '车辆故障' })
+          HmCheckBox({ value: false, title: '车辆事故' })
         }
         .height('100%')
       }
