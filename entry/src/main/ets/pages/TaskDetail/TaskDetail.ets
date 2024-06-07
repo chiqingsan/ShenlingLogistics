@@ -331,7 +331,6 @@ struct TaskDetail {
             .height(50)
             .width('80%')
             .onClick(() => {
-              Log.info("点击了")
               router.pushUrl({
                 url: 'pages/CarRecord/CarRecord',
                 params: {

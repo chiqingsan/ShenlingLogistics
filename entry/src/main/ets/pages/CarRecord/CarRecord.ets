@@ -1,14 +1,18 @@
-import { HmNavBar, HmCard, HmCardItem, CommonRouterParams, HmCheckBox } from '@hm/basic'
-import { TaskDetailInfo, TaskDetailInfoModel } from '../../models'
-import { router } from '@kit.ArkUI'
-import { getTaskDetail } from '../../api'
-import { Log } from '@abner/log'
+import { HmNavBar, HmCard, HmCardItem, CommonRouterParams, HmCheckBox, HmLoading } from '@hm/basic'
+import { CarRecordType, CarRecordTypeModel, TaskDetailInfo, TaskDetailInfoModel } from '../../models'
+import { promptAction, router } from '@kit.ArkUI'
+import { carRecord, getTaskDetail } from '../../api'
 
 @Entry
 @Component
 struct CarRecord {
+  @State carRecord: CarRecordTypeModel = new CarRecordTypeModel({} as CarRecordType)
   @State taskDetailData: TaskDetailInfoModel = new TaskDetailInfoModel({} as TaskDetailInfo)
   @State enterTime: string = "请选择"
+  loading: CustomDialogController = new CustomDialogController({
+    builder: HmLoading(),
+    customStyle: true
+  })
 
   aboutToAppear() {
     const params = router.getParams() as CommonRouterParams
@@ -17,8 +21,33 @@ struct CarRecord {
     }
   }
 
+  // 根据ID请求任务详情
   async getTaskDetail(id: string) {
     this.taskDetailData = await getTaskDetail(id)
+  }
+
+  // 回车时间
+  endTime(value: Date) {
+    const enterTime = value.toJSON().split(".")[0].split("T").join(" ")
+    this.enterTime = enterTime
+    this.carRecord.endTime = enterTime
+  }
+
+  // 检查再提交
+  async btnCarRecord() {
+    if (!this.carRecord.endTime) {
+      promptAction.showToast({ message: '请选择回车时间' })
+      return
+    }
+    this.loading.open()
+    this.carRecord.startTime = this.taskDetailData.actualDepartureTime
+    // 运输任务id
+    this.carRecord.id = this.taskDetailData.transportTaskId // 注意注意再注意
+    await carRecord(this.carRecord)
+    this.loading.close()
+    promptAction.showToast({ message: '回车登记成功' })
+    router.clear() // 清空页面栈
+    router.replaceUrl({ url: 'pages/Index/Index' })
   }
 
   build() {
@@ -40,17 +69,31 @@ struct CarRecord {
                   showTime: true,
                   useMilitaryTime: true,
                   onDateAccept: (value: Date) => {
-                    const enterTime = value.toJSON().split(".")[0].split("T").join(" ")
-                    this.enterTime = enterTime
+                    this.endTime(value)
                   }
                 })
               }
             })
           }
 
-          HmCheckBox({ value: false, title: '车辆违章' })
-          HmCheckBox({ value: false, title: '车辆故障' })
-          HmCheckBox({ value: false, title: '车辆事故' })
+          HmCheckBox({
+            value: !!this.carRecord.isBreakRules, title: '车辆违章',
+            checkChange: (value) => {
+              this.carRecord.isBreakRules = value
+            }
+          })
+          HmCheckBox({
+            value: !!this.carRecord.isFault, title: '车辆故障',
+            checkChange: (value) => {
+              this.carRecord.isFault = value
+            }
+          })
+          HmCheckBox({
+            value: !!this.carRecord.isAccident, title: '车辆事故',
+            checkChange: (value) => {
+              this.carRecord.isAccident = value
+            }
+          })
         }
         .height('100%')
       }
@@ -62,6 +105,9 @@ struct CarRecord {
           .backgroundColor($r('app.color.primary'))
           .width(207)
           .height(50)
+          .onClick(() => {
+            this.btnCarRecord()
+          })
       }
       .backgroundColor($r('app.color.white'))
       .height(70)
