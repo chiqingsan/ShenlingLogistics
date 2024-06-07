@@ -28,7 +28,7 @@ struct CarRecord {
 
   // 回车时间
   endTime(value: Date) {
-    const enterTime = DateFormat(value)
+    const enterTime = value.toJSON().split(".")[0].split("T").join(" ")
     this.enterTime = enterTime
     this.carRecord.endTime = enterTime
   }
