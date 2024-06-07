@@ -20,12 +20,7 @@ struct TaskList {
   @State
   allPage: number = 1 // 默认只有一页
 
-  aboutToAppear(): void {
-    // 页面创建的时候就刷新一次数据
-    this.refreshTheTaskList()
-  }
-
-  async getTaskList(append: boolean = true) {
+  async getTaskList(append: boolean) {
     const result = await getTaskList(this.queryParams)
     if (append) {
       this.taskListData.push(...result.items || [])
@@ -40,8 +35,6 @@ struct TaskList {
   async refreshTheTaskList() {
     // 重置页数为1
     this.queryParams.page = 1
-    // 请求新的列表数据
-    this.queryParams.page = 1 // 重置第一页
     await this.getTaskList(false) // 直接赋值
   }
 
@@ -57,7 +50,7 @@ struct TaskList {
       // 上拉加载的函数
       onLoad: async () => {
         // 上拉加载
-        await this.getTaskList()
+        await this.getTaskList(true)
       },
       renderItem: this.renderItem,
       onRefresh: async () => {

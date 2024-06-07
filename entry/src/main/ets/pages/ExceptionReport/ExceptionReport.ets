@@ -1,15 +1,37 @@
-import { HmCard, HmCardItem, HmNavBar, HmUpload } from '@hm/basic'
+import { CommonRouterParams, DateFormat, HmCard, HmCardItem, HmNavBar, HmUpload } from '@hm/basic'
+import { ExceptionParamsType, ExceptionParamsTypeModel } from '../../models'
+import { router } from '@kit.ArkUI'
 
 @Entry
 @Component
 struct ExceptionReport {
+  @State exceptionForm: ExceptionParamsTypeModel = new ExceptionParamsTypeModel({} as ExceptionParamsType)
+
+  aboutToAppear() {
+    const params = router.getParams() as CommonRouterParams
+    if (params && params.id) {
+      this.exceptionForm.transportTaskId = params.id
+    }
+  }
+
   build() {
     Column() {
       HmNavBar({ title: '上报异常' })
       Scroll() {
         Column() {
           HmCard() {
-            HmCardItem({ leftTitle: '异常时间', rightText: '请选择' })
+            HmCardItem({
+              leftTitle: '异常时间', rightText: this.exceptionForm.exceptionTime || '请选择',
+              onRightClick: () => {
+                DatePickerDialog.show({
+                  showTime: true,
+                  useMilitaryTime: true,
+                  onDateAccept: (value) => {
+                    this.exceptionForm.exceptionTime = DateFormat(value)
+                  }
+                })
+              }
+            })
             HmCardItem({ leftTitle: '上报位置', rightText: '请选择' })
             HmCardItem({ leftTitle: '异常类型', rightText: '请选择' })
             HmCardItem({
