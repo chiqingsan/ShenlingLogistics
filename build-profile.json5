@@ -5,13 +5,13 @@
         "name": "default",
         "type": "HarmonyOS",
         "material": {
-          "certpath": "C:\\Users\\chiqingsan\\.ohos\\config\\default_ShenlingLogistics_Cysgw-mJFbn3mz6tJdRvLmHleIsmdmAznUmV7fMr2Kg=.cer",
-          "storePassword": "0000001B24FA8EE2CF7F7B40D6197BC53C11D9BD2759F08AB94B4E4A357BD20FB1951798E77A9AADBAF370",
-          "keyAlias": "debugKey",
-          "keyPassword": "0000001BEDB40A8B66DB4CFBD8FDEC663668CFC5AAA3EDDA08679FAEA375CC66DA095464B609F2D384F6E9",
-          "profile": "C:\\Users\\chiqingsan\\.ohos\\config\\default_ShenlingLogistics_Cysgw-mJFbn3mz6tJdRvLmHleIsmdmAznUmV7fMr2Kg=.p7b",
+          "storePassword": "0000001AD4272A6449942B9125BE724AD9C41172FE082F6A63757D90A49A9BA99A12D90CB7C4359EE26B",
+          "certpath": "D:/Harmony/AppKey/shenling.cer",
+          "keyAlias": "shenlingdebug_key",
+          "keyPassword": "0000001A38E4C65CF36A60F179033658202E42037A2A845B85427EA1995961721C395C90521369EEA7A7",
+          "profile": "D:/Harmony/AppKey/shenlingDebug.p7b",
           "signAlg": "SHA256withECDSA",
-          "storeFile": "C:\\Users\\chiqingsan\\.ohos\\config\\default_ShenlingLogistics_Cysgw-mJFbn3mz6tJdRvLmHleIsmdmAznUmV7fMr2Kg=.p12"
+          "storeFile": "D:/Harmony/AppKey/chiqingsan.p12"
         }
       }
     ],

@@ -31,7 +31,11 @@
               "action.system.home"
             ]
           }
-        ]
+        ],
+        "metadata": [{
+          "name": "client_id",
+          "value": "111207205"
+        }]
       }
     ],
     "requestPermissions": [
