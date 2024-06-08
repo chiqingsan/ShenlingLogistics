@@ -7,9 +7,11 @@ struct HmSelectCard {
   showClose: boolean = true // 显示关闭按钮
   showButton: boolean = true // 显示底部按钮
   buttonText: string = "确定" // 底部按钮文本
-  confirm: () => void = () => {}
   @BuilderParam
   cardContent: () => void
+  confirm: () => void = () => {
+  }
+
   build() {
     Column() {
       Row() {
@@ -31,7 +33,7 @@ struct HmSelectCard {
       })
 
       // 渲染内容
-      if(this.cardContent) {
+      if (this.cardContent) {
         this.cardContent()
       }
       if (this.showButton) {
@@ -45,9 +47,13 @@ struct HmSelectCard {
             })
         }.width('100%').justifyContent(FlexAlign.Center)
       }
-    }.backgroundColor($r('app.color.white')).justifyContent(FlexAlign.SpaceBetween).padding({
+    }
+    .backgroundColor($r('app.color.white'))
+    .justifyContent(FlexAlign.SpaceBetween)
+    .padding({
       left: 21.36,
-      right: 21.36
+      right: 21.36,
+      bottom: 25
     })
   }
 }
