@@ -3,6 +3,10 @@
     {
       "name": "app_name",
       "value": "神领物流"
+    },
+    {
+      "name": "map_authorization_reason",
+      "value": "开启定位权限后可以使用地图服务"
     }
   ]
 }
