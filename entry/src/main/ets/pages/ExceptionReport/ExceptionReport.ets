@@ -3,6 +3,7 @@ import {
   DateFormat,
   HmCard,
   HmCardItem,
+  HmLoading,
   HmNavBar,
   HmSelectCard,
   HmUpload,
@@ -42,6 +43,10 @@ struct ExceptionReport {
     customStyle: true,
     alignment: DialogAlignment.Bottom
   })
+  loading: CustomDialogController = new CustomDialogController({
+    builder: HmLoading(),
+    customStyle: true
+  })
 
   // aboutToAppear
   async onPageShow() {
@@ -66,7 +71,9 @@ struct ExceptionReport {
 
   // 提交异常
   async btnReport() {
+    this.loading.open()
     await exceptionReport(this.exceptionForm)
+    this.loading.close()
     promptAction.showToast({
       message: '上报异常成功'
     })
@@ -182,9 +189,14 @@ struct ExceptionReport {
 
 
       Row() {
-        Button("提交").height(50).width(207).backgroundColor(
-          this.getBtnEnable() ? $r('app.color.primary') :
-          $r('app.color.primary_disabled')).enabled(this.getBtnEnable())
+        Button("提交")
+          .height(50)
+          .width(207)
+          .backgroundColor($r('app.color.primary'))
+          .enabled(this.getBtnEnable())
+          .onClick(() => {
+            this.btnReport()
+          })
       }
       .position({
         y: '100%'
