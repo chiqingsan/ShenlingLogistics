@@ -32,8 +32,12 @@ struct ExceptionReport {
     alignment: DialogAlignment.Bottom
   })
 
-  aboutToAppear() {
+  // aboutToAppear
+  onPageShow(): void {
     const params = router.getParams() as CommonRouterParams
+    if (params && params.location) {
+      this.exceptionForm.exceptionPlace = params.location
+    }
     if (params && params.id) {
       this.exceptionForm.transportTaskId = params.id
     }
@@ -91,7 +95,7 @@ struct ExceptionReport {
               }
             })
             HmCardItem({
-              leftTitle: '上报位置', rightText: '请选择', onRightClick: () => {
+              leftTitle: '上报位置', rightText: this.exceptionForm.exceptionPlace || '请选择', onRightClick: () => {
                 router.pushUrl({
                   url: 'pages/SelectLocation/SelectLocation'
                 })
