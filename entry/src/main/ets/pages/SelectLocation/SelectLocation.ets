@@ -9,14 +9,25 @@ class SiteClass {
   distance: number = 0
 }
 
+interface mapCoordinates {
+  latitude: number
+  longitude: number
+}
+
+// 初始化ui状态持久化
+PersistentStorage.persistProp("mapCoordinates", {})
+
 @Entry
 @Component
 struct SelectLocation {
   @State list: SiteClass[] = []
   mapController: map.MapComponentController = new map.MapComponentController()
+  @StorageLink("mapCoordinates") latitudeAndLongitude: mapCoordinates = {
+    latitude: 39.9,
+    longitude: 116.4
+  }
 
   async aboutToAppear() {
-    this.getLocation()
 
   }
 
@@ -29,6 +40,11 @@ struct SelectLocation {
       // };
       // let rightPostion: mapCommon.LatLng = await map.convertCoordinate(mapCommon.CoordinateType.WGS84,
       //   mapCommon.CoordinateType.GCJ02, wgs84Position);
+
+      // 保存这一次的经纬度,提供给下一次使用
+      this.latitudeAndLongitude.latitude = rightPostion.latitude
+      this.latitudeAndLongitude.longitude = rightPostion.longitude
+
       this.mapController.moveCamera(map.newCameraPosition({
         target: {
           longitude: rightPostion.longitude,
@@ -36,7 +52,8 @@ struct SelectLocation {
         },
         zoom: 16 // 缩放级别
       }))
-      this.mapController.addPointAnnotation({
+
+      await this.mapController.addPointAnnotation({
         position: {
           longitude: rightPostion.longitude,
           latitude: rightPostion.latitude
@@ -45,7 +62,6 @@ struct SelectLocation {
           content: '您当前的位置'
         }],
       })
-
 
       const res = await site.nearbySearch({
         location: {
@@ -75,10 +91,10 @@ struct SelectLocation {
           mapOptions: {
             position: {
               target: {
-                latitude: 39.9,
-                longitude: 116.4
+                latitude: this.latitudeAndLongitude.latitude,
+                longitude: this.latitudeAndLongitude.longitude
               },
-              zoom: 10
+              zoom: 16
             }
           },
           mapCallback: (err, controller) => {
@@ -93,15 +109,17 @@ struct SelectLocation {
         Column() {
           HmCard() {
             ForEach(this.list, (item: SiteClass) => {
-              HmCardItem({ leftTitle: item.name, rightText: `${item.distance}m` })
-                .onClick(() => {
+              HmCardItem({
+                leftTitle: item.name, rightText: `${item.distance}m`,
+                onRightClick: () => {
                   router.back({
                     url: "pages/ExceptionReport/ExceptionReport",
                     params: {
                       location: item.name
                     }
                   })
-                })
+                }
+              })
             })
           }
         }

@@ -5,13 +5,13 @@
         "name": "default",
         "type": "HarmonyOS",
         "material": {
-          "storePassword": "0000001AD4272A6449942B9125BE724AD9C41172FE082F6A63757D90A49A9BA99A12D90CB7C4359EE26B",
-          "certpath": "D:/Harmony/AppKey/shenling.cer",
-          "keyAlias": "shenlingdebug_key",
-          "keyPassword": "0000001A38E4C65CF36A60F179033658202E42037A2A845B85427EA1995961721C395C90521369EEA7A7",
-          "profile": "D:/Harmony/AppKey/shenlingDebug.p7b",
+          "storePassword": "0000001A57AF6D15B71CC0834AF4A93B65975FA2271D7FF6859713EA7EC608845157615021E3AA3079A3",
+          "certpath": "D:/Harmony/AppKey/shenling/shenling.cer",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001AD6A89746EC4CE8B40C6A02C4B41D096FA25351545738AFE791585C90B4CD39A725CB30AFE572",
+          "profile": "D:/Harmony/AppKey/shenling/shenlingDebug.p7b",
           "signAlg": "SHA256withECDSA",
-          "storeFile": "D:/Harmony/AppKey/chiqingsan.p12"
+          "storeFile": "D:/Harmony/AppKey/shenling/chiqingsan.p12"
         }
       }
     ],

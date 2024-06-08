@@ -9,7 +9,8 @@ import {
   ImageList
 } from '@hm/basic'
 import { ExceptionParamsType, ExceptionParamsTypeModel } from '../../models'
-import { router } from '@kit.ArkUI'
+import { promptAction, router } from '@kit.ArkUI'
+import { exceptionReport } from '../../api'
 
 class ExceptionItemClass {
   name: string = ""
@@ -43,14 +44,15 @@ struct ExceptionReport {
   })
 
   // aboutToAppear
-  onPageShow(): void {
+  async onPageShow() {
     const params = router.getParams() as CommonRouterParams
-    if (params && params.location) {
-      this.exceptionForm.exceptionPlace = params.location
-    }
     if (params && params.id) {
       this.exceptionForm.transportTaskId = params.id
     }
+    if (params && params.location) {
+      this.exceptionForm.exceptionPlace = params.location
+    }
+
   }
 
   // 合法性检查
@@ -60,6 +62,15 @@ struct ExceptionReport {
     this.exceptionForm.exceptionTime &&
     this.exceptionForm.exceptionType &&
     this.exceptionForm.exceptionDescribe)
+  }
+
+  // 提交异常
+  async btnReport() {
+    await exceptionReport(this.exceptionForm)
+    promptAction.showToast({
+      message: '上报异常成功'
+    })
+    router.back()
   }
 
   // 传入HmSelectCard组件
@@ -156,22 +167,18 @@ struct ExceptionReport {
               .fontColor($r('app.color.text_secondary'))
             Row().height(20)
 
+            HmUpload({
+              title: '上传图片(最多6张)',
+              maxNum: 6,
+              canUpload: true,
+              imgList: this.exceptionForm.exceptionImagesList || [],
+              onListChange: (list: ImageList[]) => {
+                this.exceptionForm.exceptionImagesList = list
+              }
+            })
           }
-
-          HmUpload({
-            title: '上传图片(最多6张)',
-            maxNum: 6,
-            canUpload: true,
-            imgList: this.exceptionForm.exceptionImagesList || [],
-            onListChange: (list: ImageList[]) => {
-              this.exceptionForm.exceptionImagesList = []
-            }
-          })
         }
-      }.padding({
-        bottom: 80
-      })
-      .layoutWeight(1)
+      }
 
 
       Row() {

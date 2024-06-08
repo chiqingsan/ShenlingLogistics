@@ -31,11 +31,7 @@
               "action.system.home"
             ]
           }
-        ],
-        "metadata": [{
-          "name": "client_id",
-          "value": "111207205"
-        }]
+        ]
       }
     ],
     "requestPermissions": [
@@ -52,6 +48,12 @@
         "reason": "$string:map_authorization_reason",
         "usedScene": {}
       }
+    ],
+    "metadata": [ // 配置如下信息
+      {
+        "name": "client_id",
+        "value": "111207205"  //配置为获取的Client ID
+      },
     ]
   }
 }
