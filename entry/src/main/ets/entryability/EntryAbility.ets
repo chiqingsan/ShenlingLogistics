@@ -1,14 +1,15 @@
 import { AbilityConstant, errorManager, UIAbility, Want } from '@kit.AbilityKit';
 import { FaultLogger, hilog } from '@kit.PerformanceAnalysisKit';
 import { promptAction, window } from '@kit.ArkUI';
-import { AdvertClass, TOKEN_KEY, UserSettingClass } from '@hm/basic'
+import { AdvertClass, PermissionManager, TOKEN_KEY, UserSettingClass } from '@hm/basic'
 import { Log } from '@abner/log';
 
 let errorManagerId = -1
 
 export default class EntryAbility extends UIAbility {
-  onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
+  async onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): Promise<void> {
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onCreate');
+
 
     // todo 需要对错误信息进行记录或者上报
     // 注册错误观察器,来捕获未知的错误
@@ -36,15 +37,21 @@ export default class EntryAbility extends UIAbility {
       showLogLocation: true,
       logSize: 1024
     })
+
+
   }
 
   onDestroy(): void {
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onDestroy');
+
+    // 关闭错误观察器
+    errorManager.off("error", errorManagerId)
   }
 
-  async onWindowStageCreate(windowStage: window.WindowStage): Promise<void> {
+  async onWindowStageCreate(windowStage: window.WindowStage) {
     // Main window is created, set main page for this ability
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onWindowStageCreate');
+
     // 拿到持久化广告类的对象
     const adSetting = new UserSettingClass(this.context)
 
@@ -82,6 +89,7 @@ export default class EntryAbility extends UIAbility {
       pagePath = "/pages/Login/Login".slice(1)
     }
 
+
     // 进入pages页面
     windowStage.loadContent(pagePath, (err) => {
       if (err.code) {
@@ -89,6 +97,8 @@ export default class EntryAbility extends UIAbility {
         return;
       }
       hilog.info(0x0000, 'testTag', 'Succeeded in loading the content.');
+
+
     });
   }
 

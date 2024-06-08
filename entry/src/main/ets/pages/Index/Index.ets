@@ -1,7 +1,8 @@
-import { TabClass, windowManager } from '@hm/basic'
+import { PermissionManager, TabClass, windowManager } from '@hm/basic'
 import My from './My/My'
 import { getUserInfo } from '../../api/user'
 import TaskTabs from './Task/TaskTabs'
+import { Log } from '@abner/log'
 
 @Entry
 @Component
@@ -25,6 +26,12 @@ struct Index {
   async aboutToAppear(): Promise<void> {
     // 开始沉浸式状态栏
     AppStorage.setOrCreate("userInfo", await getUserInfo())
+    // 进入页面后,申请权限
+    // 申请定位权限
+    await new PermissionManager(getContext()).requestPermissions([
+      'ohos.permission.LOCATION',
+      'ohos.permission.APPROXIMATELY_LOCATION'
+    ])
   }
 
   onPageShow(): void {
