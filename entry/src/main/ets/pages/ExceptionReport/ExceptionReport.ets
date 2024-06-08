@@ -18,10 +18,16 @@ struct ExceptionReport {
   typeDialog: CustomDialogController = new CustomDialogController({
     builder: HmSelectCard({
       cardContent: () => {
+        // 必须调用一个builder的函数
         this.getCardContent()
+      },
+      confirm: () => {
+        if (this.selectIndex > -1) {
+          this.exceptionForm.exceptionType = this.exceptErrorList[this.selectIndex]
+        }
+        this.typeDialog.close()
       }
     }),
-    autoCancel: false,
     customStyle: true,
     alignment: DialogAlignment.Bottom
   })
@@ -86,7 +92,10 @@ struct ExceptionReport {
             })
             HmCardItem({ leftTitle: '上报位置', rightText: '请选择' })
             HmCardItem({
-              leftTitle: '异常类型', rightText: '请选择', onRightClick: () => {
+              leftTitle: '异常类型',
+              rightText: this.exceptionForm.exceptionType || '请选择',
+              showBottomBorder: false,
+              onRightClick: () => {
                 this.typeDialog.open()
               }
             })
