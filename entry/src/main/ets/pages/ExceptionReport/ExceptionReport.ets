@@ -1,4 +1,13 @@
-import { CommonRouterParams, DateFormat, HmCard, HmCardItem, HmNavBar, HmSelectCard, HmUpload } from '@hm/basic'
+import {
+  CommonRouterParams,
+  DateFormat,
+  HmCard,
+  HmCardItem,
+  HmNavBar,
+  HmSelectCard,
+  HmUpload,
+  ImageList
+} from '@hm/basic'
 import { ExceptionParamsType, ExceptionParamsTypeModel } from '../../models'
 import { router } from '@kit.ArkUI'
 
@@ -14,6 +23,7 @@ struct ExceptionReport {
   @State exceptErrorList: string[] =
     ["发动机启动困难", "不着车、漏油", "照明失灵", "有异常响动", "排烟异常、温度异常", "其他问题"]
   @State selectIndex: number = 0
+  maxNumber: number = 50
   // 异常类型弹层
   typeDialog: CustomDialogController = new CustomDialogController({
     builder: HmSelectCard({
@@ -41,6 +51,15 @@ struct ExceptionReport {
     if (params && params.id) {
       this.exceptionForm.transportTaskId = params.id
     }
+  }
+
+  // 合法性检查
+  getBtnEnable() {
+    return !!(this.exceptionForm.exceptionDescribe &&
+    this.exceptionForm.exceptionPlace &&
+    this.exceptionForm.exceptionTime &&
+    this.exceptionForm.exceptionType &&
+    this.exceptionForm.exceptionDescribe)
   }
 
   // 传入HmSelectCard组件
@@ -116,9 +135,18 @@ struct ExceptionReport {
               showBottomBorder: false
             })
             TextArea({
-              placeholder: '请输入异常描述'
-            }).height(130).borderRadius(8).placeholderColor($r('app.color.text_secondary')).fontSize(14)
-            Text(`0/50`)
+              placeholder: '请输入异常描述',
+              text: this.exceptionForm.exceptionDescribe!
+            })
+              .height(130)
+              .borderRadius(8)
+              .placeholderColor($r('app.color.text_secondary'))
+              .fontSize(14)
+              .onChange((value) => {
+                this.exceptionForm.exceptionDescribe = value
+              })
+              .maxLength(this.maxNumber)
+            Text(`${this.exceptionForm.exceptionDescribe?.length || 0}/${this.maxNumber}`)
               .margin({
                 top: -30
               })
@@ -130,14 +158,15 @@ struct ExceptionReport {
 
           }
 
-          HmCard() {
-            HmUpload({
-              title: '上传图片(最多6张)',
-              imgList: []
-            , canUpload: true
-            })
-            Row().height(20)
-          }
+          HmUpload({
+            title: '上传图片(最多6张)',
+            maxNum: 6,
+            canUpload: true,
+            imgList: this.exceptionForm.exceptionImagesList || [],
+            onListChange: (list: ImageList[]) => {
+              this.exceptionForm.exceptionImagesList = []
+            }
+          })
         }
       }.padding({
         bottom: 80
@@ -146,7 +175,9 @@ struct ExceptionReport {
 
 
       Row() {
-        Button("提交").height(50).width(207).backgroundColor($r('app.color.primary_disabled'))
+        Button("提交").height(50).width(207).backgroundColor(
+          this.getBtnEnable() ? $r('app.color.primary') :
+          $r('app.color.primary_disabled')).enabled(this.getBtnEnable())
       }
       .position({
         y: '100%'
