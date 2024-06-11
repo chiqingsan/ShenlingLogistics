@@ -1,7 +1,7 @@
 {
   "app": {
     "bundleName": "com.chiqingsan.shenlinglogistics",
-    "patchVersionCode": 2000120,
+    "patchVersionCode": 2000121,
     "versionCode": 1000000
   },
   "module": {
