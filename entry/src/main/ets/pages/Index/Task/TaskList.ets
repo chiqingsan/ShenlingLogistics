@@ -1,4 +1,4 @@
-import { HmList, HmLoading } from '@hm/basic/Index'
+import { HmList, HmLoading, HmNoting } from '@hm/basic/Index'
 import { getTaskList } from '../../../api'
 import { TaskInfoItem, TaskInfoItemModel, TaskListParams, TaskListParamsModel, TaskTypeEnum } from '../../../models'
 import TaskItemCard from './TaskItemCard'
@@ -30,6 +30,11 @@ export struct TaskList {
     alignment: DialogAlignment.Center
   })
 
+  aboutToAppear(): void {
+    // 进入页面的时候,先请求一次数据
+    this.refreshTheTaskList()
+  }
+
   async getTaskList(append: boolean) {
     const result = await getTaskList(this.queryParams)
     if (append) {
@@ -56,6 +61,17 @@ export struct TaskList {
   // 控制筛选按钮可点
   getSearchEnable() {
     return this.queryParams.startTime && this.queryParams.endTime ? true : false
+  }
+
+  // 获取没有货物时的文本
+  getNothingText() {
+    if (this.queryParams.status === TaskTypeEnum.Waiting) {
+      return "无待提货物"
+    } else if (this.queryParams.status === TaskTypeEnum.Line) {
+      return "无在途任务"
+    } else {
+      return "无完成任务"
+    }
   }
 
   @Builder
@@ -166,21 +182,31 @@ export struct TaskList {
       if (this.queryParams.status === TaskTypeEnum.Finish) {
         this.getSearchForm()
       }
-      HmList({
-        dataSource: this.taskListData, // 数据源
-        finished: this.allPage < this.queryParams.page, // 是否还有下一页
-        // 上拉加载的函数
-        onLoad: async () => {
-          // 上拉加载
-          await this.getTaskList(true)
-        },
-        renderItem: this.renderItem,
-        onRefresh: async () => {
-          await this.refreshTheTaskList()
-        },
-        loadingText: '拼命加载中',
-        finishText: '没啦没啦'
-      })
+      if (this.taskListData) {
+        HmList({
+          dataSource: this.taskListData, // 数据源
+          finished: this.allPage < this.queryParams.page, // 是否还有下一页
+          // 上拉加载的函数
+          onLoad: async () => {
+            // 上拉加载
+            await this.getTaskList(true)
+          },
+          renderItem: this.renderItem,
+          onRefresh: async () => {
+            await this.refreshTheTaskList()
+          },
+          loadingText: '拼命加载中',
+          finishText: '没啦没啦'
+        })
+      } else {
+        HmNoting({
+          contents: this.getNothingText()
+        })
+      }
+
     }
+    .width("100%")
+    .height("100%")
+    .justifyContent(FlexAlign.Center)
   }
 }

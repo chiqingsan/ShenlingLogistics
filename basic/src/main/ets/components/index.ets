@@ -21,3 +21,5 @@ export * from './HmLoading'
 export * from './HmSelectCard'
 
 export * from './HmCheckBox'
+
+export * from './HmNoting'

@@ -1,7 +1,7 @@
 import router from '@ohos.router';
 import promptAction from '@ohos.promptAction';
-import { MessageItemModel, MessageQueryTypeModel } from '../../models';
-import { getMessage, readAllMessage, readMessage } from '../../api';
+import { MessageItemModel, MessageQueryTypeModel } from '../../../models/index';
+import { getMessage, readAllMessage, readMessage } from '../../../api/index';
 import { HmList } from '@hm/basic/Index';
 
 @Component

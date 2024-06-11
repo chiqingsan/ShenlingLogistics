@@ -1,4 +1,4 @@
-import { HmNavBar, TabClass } from '@hm/basic'
+import { HmNavBar, TabClass } from '@hm/basic/Index'
 import MessageTemplate from './MessageTemplate'
 
 @Component

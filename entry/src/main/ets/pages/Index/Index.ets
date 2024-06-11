@@ -3,7 +3,7 @@ import My from './My/My'
 import { getUserInfo } from '../../api/user'
 import TaskTabs from './Task/TaskTabs'
 import { Log } from '@abner/log'
-import Message from '../Message/Message'
+import Message from './Message/Message'
 
 @Entry
 @Component

@@ -55,9 +55,7 @@ struct TaskTabs {
         ForEach(this.tabsData, (item: TabClass) => {
           TabContent() {
             if (item.name === "waiting") {
-              TaskList({
-                index: this.currentIndex
-              })
+              TaskList()
             } else if (item.name === 'line') {
               TaskList({
                 queryParams: new TaskListParamsModel({

@@ -1,7 +1,7 @@
-import { HmNavBar } from '@hm/basic'
+import { HmNavBar } from '@hm/basic/Index'
 import router from '@ohos.router';
-import { DetailTypeModel } from '../../models';
-import { readMessage } from '../../api';
+import { DetailTypeModel } from '../../../models/index';
+import { readMessage } from '../../../api/index';
 
 @Entry
 @Component

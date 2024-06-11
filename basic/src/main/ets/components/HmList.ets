@@ -1,3 +1,5 @@
+import { Log } from '@abner/log'
+
 @Component
 struct HmList {
   // 记录当前下拉状态
@@ -98,6 +100,7 @@ struct HmList {
       .width("100%")
       .scrollBar(BarState.Off)
       .onReachEnd(async () => {
+        Log.info("没有数据,触底了")
         // 实现上拉加载
         // 需要一个标记 是否已经加载完所有数据
         // 在没有加载完所有页数据的情况 且没有请求在进程中的情况下
