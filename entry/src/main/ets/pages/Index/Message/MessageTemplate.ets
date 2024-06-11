@@ -140,11 +140,10 @@ struct MessageTemplate {
           })
       }.justifyContent(FlexAlign.SpaceBetween).alignItems(VerticalAlign.Center).width('100%')
     }
-    .width('100%')
     .backgroundColor($r('app.color.white'))
     .borderRadius(10)
     .padding(16)
-    .margin({ bottom: 15 })
+    .margin(15)
     .alignItems(HorizontalAlign.Start)
   }
 
