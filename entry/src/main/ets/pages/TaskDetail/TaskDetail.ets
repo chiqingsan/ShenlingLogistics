@@ -2,6 +2,7 @@ import { HmNavBar, CommonRouterParams, HmToggleCard, HmUpload, ImageList, Upload
 import { promptAction, router } from '@kit.ArkUI'
 import {
   DeliverParamsTypeModel,
+  ExceptionList,
   PickUpParamsModel,
   TaskDetailInfo,
   TaskDetailInfoModel,
@@ -391,6 +392,40 @@ struct TaskDetail {
     })
   }
 
+  // 异常信息
+  // 获取异常信息
+  @Builder
+  getExceptionContent() {
+    ForEach(this.taskDetailData.exceptionList, (item: ExceptionList) => {
+      Row() {
+        Column() {
+          Row() {
+            Text("上报时间").fontSize(14).fontColor($r('app.color.text_primary'))
+            Text(item.exceptionTime).margin({ left: 20 }).fontColor($r('app.color.text_secondary'))
+          }.height(50).alignItems(VerticalAlign.Center).width('100%')
+
+          Row() {
+            Text("异常类型").fontSize(14).fontColor($r('app.color.text_primary'))
+            Text(item.exceptionType).margin({ left: 20 }).fontColor($r('app.color.text_secondary'))
+          }.height(50).alignItems(VerticalAlign.Center).width('100%')
+
+          Row() {
+            Text("处理结果").fontSize(14).fontColor($r('app.color.text_primary'))
+            Text("继续运输").margin({ left: 20 }).fontColor($r('app.color.text_secondary'))
+          }.height(50).alignItems(VerticalAlign.Center).width('100%')
+        }
+
+        // 跳转到详情
+        Image($r("app.media.ic_btn_more")).width(24).height(24)
+      }
+      .width('100%')
+      .padding({ left: 15, right: 15 })
+      .alignItems(VerticalAlign.Center)
+      .justifyContent(FlexAlign.SpaceBetween)
+
+    })
+  }
+
   build() {
     Column() {
       HmNavBar({ title: '任务详情' })
@@ -407,6 +442,12 @@ struct TaskDetail {
           HmToggleCard({ title: '运输路线' }) {
             this.getTransLineContent()
           }
+          
+          if (this.taskDetailData.exceptionList?.length > 0) {
+            HmToggleCard({ title: '异常信息' }) {
+              this.getExceptionContent()
+            }
+          }
 
           if (this.taskDetailData.status === TaskTypeEnum.Waiting) {
             HmToggleCard({ title: '提货信息' }) {
@@ -417,6 +458,7 @@ struct TaskDetail {
               this.getDeliverContent()
             }
           }
+
         }
         .padding({
           bottom: 15

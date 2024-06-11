@@ -115,10 +115,11 @@ struct HmUpload {
           }
         }
       }
-      .height(Math.ceil(this.maxNum / 3) * 105)
+      // .height(Math.ceil(this.maxNum / 3) * 105)
+      .padding({ bottom: 20 })
       .columnsTemplate("1fr 1fr 1fr")
       .columnsGap(10)
-    }.alignItems(HorizontalAlign.Start).width('100%')
+    }.alignItems(HorizontalAlign.Start)
   }
 }
 
