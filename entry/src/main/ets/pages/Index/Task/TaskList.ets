@@ -30,11 +30,6 @@ export struct TaskList {
     alignment: DialogAlignment.Center
   })
 
-  aboutToAppear(): void {
-    // 进入页面的时候,先请求一次数据
-    this.refreshTheTaskList()
-  }
-
   async getTaskList(append: boolean) {
     const result = await getTaskList(this.queryParams)
     if (append) {
@@ -182,31 +177,24 @@ export struct TaskList {
       if (this.queryParams.status === TaskTypeEnum.Finish) {
         this.getSearchForm()
       }
-      if (this.taskListData) {
-        HmList({
-          dataSource: this.taskListData, // 数据源
-          finished: this.allPage < this.queryParams.page, // 是否还有下一页
-          // 上拉加载的函数
-          onLoad: async () => {
-            // 上拉加载
-            await this.getTaskList(true)
-          },
-          renderItem: this.renderItem,
-          onRefresh: async () => {
-            await this.refreshTheTaskList()
-          },
-          loadingText: '拼命加载中',
-          finishText: '没啦没啦'
-        })
-      } else {
-        HmNoting({
-          contents: this.getNothingText()
-        })
-      }
+      HmList({
+        dataSource: this.taskListData, // 数据源
+        finished: this.allPage < this.queryParams.page, // 是否还有下一页
+        // 上拉加载的函数
+        onLoad: async () => {
+          // 上拉加载
+          await this.getTaskList(true)
+        },
+        renderItem: this.renderItem,
+        onRefresh: async () => {
+          await this.refreshTheTaskList()
+        },
+        loadingText: '拼命加载中',
+        finishText: '没啦没啦'
+      })
 
     }
     .width("100%")
     .height("100%")
-    .justifyContent(FlexAlign.Center)
   }
 }
