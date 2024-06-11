@@ -1,4 +1,4 @@
-import { HmList } from '@hm/basic/Index'
+import { HmList, HmLoading } from '@hm/basic/Index'
 import { getTaskList } from '../../../api'
 import { TaskInfoItem, TaskInfoItemModel, TaskListParams, TaskListParamsModel, TaskTypeEnum } from '../../../models'
 import TaskItemCard from './TaskItemCard'
@@ -19,6 +19,14 @@ export struct TaskList {
   taskListData: TaskInfoItem[] = []
   @State
   allPage: number = 1 // 默认只有一页
+  loading: CustomDialogController = new CustomDialogController({
+    builder: HmLoading({
+      title: '搜索查询中'
+    }),
+    customStyle: true,
+    autoCancel: false,
+    alignment: DialogAlignment.Center
+  })
 
   async getTaskList(append: boolean) {
     const result = await getTaskList(this.queryParams)
@@ -38,6 +46,16 @@ export struct TaskList {
     await this.getTaskList(false) // 直接赋值
   }
 
+  // 日期补零
+  addZero(value: number) {
+    return value.toString().padStart(2, "0")
+  }
+
+  // 控制筛选按钮可点
+  getSearchEnable() {
+    return this.queryParams.startTime && this.queryParams.endTime ? true : false
+  }
+
   @Builder
   getSearchForm() {
     Column() {
@@ -49,27 +67,56 @@ export struct TaskList {
 
       Row() {
         // 完成搜索页需要测试点击之后键盘和弹层同时弹出的情况
-        Button('开始时间')
+        Button(this.queryParams.startTime || '开始时间')
           .fontSize(14)
           .width(106)
           .height(32)
           .padding({ left: 0, right: 0 })
           .fontColor('#999')
           .backgroundColor($r('app.color.background_page'))
+          .onClick(() => {
+            DatePickerDialog.show({
+              selected: new Date(),
+              onAccept: (value: DatePickerResult) => {
+                this.queryParams.startTime =
+                  `${value.year}-${this.addZero(value.month! + 1)}-${this.addZero(value.day)}`
+              }
+            })
+          })
 
         Text("至")
-        Button('结束时间')
+        Button(this.queryParams.endTime || '结束时间')
           .fontSize(14)
           .width(110)
           .height(32)
           .padding({ left: 0, right: 0 })
           .fontColor('#999')
           .backgroundColor($r('app.color.background_page'))
+          .onClick(() => {
+            DatePickerDialog.show({
+              selected: new Date(),
+              onAccept: (value: DatePickerResult) => {
+                this.queryParams.endTime = `${value.year}-${this.addZero(value.month! + 1)}-${this.addZero(value.day)}`
+              }
+            })
+          })
         Button("筛选")
-          .backgroundColor($r('app.color.primary_disabled'))
+          .backgroundColor($r('app.color.primary'))
           .height(32)
           .width(60)
-      }.width('100%').alignItems(VerticalAlign.Center).justifyContent(FlexAlign.SpaceAround)
+          .enabled(this.getSearchEnable())
+          .onClick(async () => {
+            this.loading.open()
+            this.allPage = 1
+            this.queryParams.page = 1
+            await this.getTaskList(false)
+            this.loading.close()
+          })
+      }
+      .width('100%')
+      .alignItems(VerticalAlign.Center)
+      .justifyContent(FlexAlign.SpaceAround)
+      .padding({ left: 15, right: 15 })
     }
     .backgroundColor($r('app.color.white'))
     .padding({
