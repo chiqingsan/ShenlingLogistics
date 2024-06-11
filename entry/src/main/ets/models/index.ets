@@ -17,3 +17,5 @@ export * from "./delay"
 export * from "./exception"
 
 export * from "./message"
+
+export * from "./car"

@@ -46,3 +46,5 @@ export class UserInfoModel implements UserInfo {
     this.phone = model.phone
   }
 }
+
+
