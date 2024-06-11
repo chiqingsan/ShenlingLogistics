@@ -1,4 +1,4 @@
-import { UserSettingClass, AdvertClass } from '@hm/basic'
+import { UserSettingClass, AdvertClass, windowManager } from '@hm/basic'
 import { window } from '@kit.ArkUI'
 
 @Entry
@@ -6,13 +6,13 @@ import { window } from '@kit.ArkUI'
 struct Start {
   userSetting: UserSettingClass = new UserSettingClass(getContext())
   @State
-  adObj: AdvertClass  = {} as AdvertClass
+  adObj: AdvertClass = {} as AdvertClass
   timer: number = -1
 
   async aboutToAppear() {
     this.adObj = await this.userSetting.getUserAd()
     this.timer = setInterval(() => {
-      if(this.adObj.adTime === 0) {
+      if (this.adObj.adTime === 0) {
         clearInterval(this.timer)
         this.closeWin()
         return
@@ -22,11 +22,13 @@ struct Start {
   }
 
   // 关闭广告
-  closeWin () {
+  closeWin() {
     window.findWindow("ad_window").destroyWindow()
   }
 
   aboutToDisappear(): void {
+    // 开始沉浸式状态栏
+    windowManager.enableFullScreen(true)
     clearInterval(this.timer)
   }
 
@@ -41,7 +43,12 @@ struct Start {
         .borderRadius(15)
         .backgroundColor($r("app.color.background_page"))
         .textAlign(TextAlign.Center)
-        .onClick( () => {this.closeWin()})
+        .onClick(() => {
+          this.closeWin()
+        })
+        .offset({
+          y: 30
+        })
 
     }.height('100%').width('100%')
   }

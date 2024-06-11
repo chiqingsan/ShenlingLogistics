@@ -25,7 +25,7 @@ struct Index {
   @Provide currentName: string = ""
 
   async aboutToAppear(): Promise<void> {
-    // 开始沉浸式状态栏
+
     AppStorage.setOrCreate("userInfo", await getUserInfo())
     // 进入页面后,申请权限
     // 申请定位权限
@@ -77,7 +77,7 @@ struct Index {
       })
     }
     .scrollable(false)
-    .padding({ bottom: 25 })
+    .padding({ bottom: 18 })
     .onTabBarClick((index) => {
       this.currentIndex = index
     })

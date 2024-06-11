@@ -1,7 +1,7 @@
 import { AbilityConstant, errorManager, UIAbility, Want } from '@kit.AbilityKit';
 import { FaultLogger, hilog } from '@kit.PerformanceAnalysisKit';
 import { promptAction, window } from '@kit.ArkUI';
-import { AdvertClass, PermissionManager, TOKEN_KEY, UserSettingClass } from '@hm/basic'
+import { AdvertClass, PermissionManager, TOKEN_KEY, UserSettingClass, windowManager } from '@hm/basic'
 import { Log } from '@abner/log';
 
 let errorManagerId = -1
@@ -51,6 +51,8 @@ export default class EntryAbility extends UIAbility {
   async onWindowStageCreate(windowStage: window.WindowStage) {
     // Main window is created, set main page for this ability
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onWindowStageCreate');
+
+
 
     // 拿到持久化广告类的对象
     const adSetting = new UserSettingClass(this.context)
