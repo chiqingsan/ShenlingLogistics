@@ -26,6 +26,8 @@ struct Setting {
     // 删除token
     AppStorage.set<string>(TOKEN_KEY, "")
     new UserSettingClass(getContext(this)).setUserToken("")
+    // 退出登录需要清空路由栈
+    router.clear()
     router.replaceUrl({
       url: 'pages/Login/Login'
     })
@@ -46,7 +48,8 @@ struct Setting {
       }
 
       Row() {
-        Button("退出", { type: ButtonType.Normal })
+        Button("退出")
+          .type(ButtonType.Normal)
           .backgroundColor($r('app.color.white'))
           .fontColor($r("app.color.text_primary"))
           .width('100%')
