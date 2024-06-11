@@ -3,6 +3,7 @@ import My from './My/My'
 import { getUserInfo } from '../../api/user'
 import TaskTabs from './Task/TaskTabs'
 import { Log } from '@abner/log'
+import Message from '../Message/Message'
 
 @Entry
 @Component
@@ -68,7 +69,7 @@ struct Index {
           if (item.name === 'task') {
             TaskTabs()
           } else if (item.name === 'message') {
-            Text("消息页面")
+            Message()
           } else {
             My()
           }
