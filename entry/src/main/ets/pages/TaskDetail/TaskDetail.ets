@@ -423,8 +423,16 @@ struct TaskDetail {
           }.height(50).alignItems(VerticalAlign.Center).width('100%')
         }
 
+
         // 跳转到详情
-        Image($r("app.media.ic_btn_more")).width(24).height(24)
+        Image($r("app.media.ic_btn_more")).width(24).height(24).onClick(() => {
+          router.pushUrl({
+            url: "pages/ExceptionReport/ExceptionDetail",
+            params: {
+              formData: item
+            }
+          })
+        })
       }
       .width('100%')
       .padding({ left: 15, right: 15 })

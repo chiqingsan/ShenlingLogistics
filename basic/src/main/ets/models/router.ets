@@ -3,5 +3,5 @@ export class CommonRouterParams {
   oldTime?: string = ''
   location?: string = ''
   addExcept?: boolean = false
+  formData?: object
 }
-
