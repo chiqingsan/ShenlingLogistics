@@ -497,11 +497,15 @@ struct TaskDetail {
             }
           }
 
-          if (this.taskDetailData.status === TaskTypeEnum.Waiting) {
+          if (this.taskDetailData.status === TaskTypeEnum.Waiting
+            || this.taskDetailData.status === TaskTypeEnum.Delivered
+            || this.taskDetailData.status === TaskTypeEnum.Finish) {
             HmToggleCard({ title: '提货信息' }) {
               this.getPickUpContent()
             }
-          } else if (this.taskDetailData.status === TaskTypeEnum.Line) {
+          } else if (this.taskDetailData.status === TaskTypeEnum.Line
+            || this.taskDetailData.status === TaskTypeEnum.Delivered
+            || this.taskDetailData.status === TaskTypeEnum.Finish) {
             HmToggleCard({ title: '交货信息' }) {
               this.getDeliverContent()
             }

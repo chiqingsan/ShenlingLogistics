@@ -144,16 +144,18 @@ struct TaskItemCard {
             .margin({ top: 4 })
         }.alignItems(HorizontalAlign.Start)
 
-        Button(this.getBtnText(), { type: ButtonType.Capsule })
-          .backgroundColor($r('app.color.btn_red'))
-          .fontColor($r("app.color.white"))
-          .fontSize(13)
-          .height(35)
-          .width(85)
-          .enabled(this.getBtnEnable())
-          .onClick(() => {
-            this.toPickUp()
-          })
+        if (parseInt(this.taskItemData.status) !== TaskTypeEnum.Finish) {
+          Button(this.getBtnText(), { type: ButtonType.Capsule })
+            .backgroundColor($r('app.color.btn_red'))
+            .fontColor($r("app.color.white"))
+            .fontSize(13)
+            .height(35)
+            .width(85)
+            .enabled(this.getBtnEnable())
+            .onClick(() => {
+              this.toPickUp()
+            })
+        }
 
       }.justifyContent(FlexAlign.SpaceBetween).width('100%')
     }
@@ -166,7 +168,16 @@ struct TaskItemCard {
     })
     .borderRadius(10)
     .backgroundColor($r('app.color.white'))
-
+    .onClick(() => {
+      if (parseInt(this.taskItemData.status) === TaskTypeEnum.Finish) {
+        router.pushUrl({
+          url: 'pages/TaskDetail/TaskDetail',
+          params: {
+            id: this.taskItemData.id
+          }
+        })
+      }
+    })
   }
 }
 
