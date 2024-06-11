@@ -35,6 +35,14 @@ struct TaskDetail {
     }
   }
 
+  async onPageShow() {
+    const params = router.getParams() as CommonRouterParams
+    if (params && params.addExcept) {
+      const result = await getTaskDetail(this.taskDetailData.id)
+      this.taskDetailData.exceptionList = result.exceptionList
+    }
+  }
+
   // 获取任务详情
   async getTaskDetail(id: string) {
     this.loading.open()
@@ -442,7 +450,7 @@ struct TaskDetail {
           HmToggleCard({ title: '运输路线' }) {
             this.getTransLineContent()
           }
-          
+
           if (this.taskDetailData.exceptionList?.length > 0) {
             HmToggleCard({ title: '异常信息' }) {
               this.getExceptionContent()

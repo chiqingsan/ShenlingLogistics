@@ -71,14 +71,19 @@ struct ExceptionReport {
 
   // 提交异常
   async btnReport() {
-    this.loading.open()
     await exceptionReport(this.exceptionForm)
-    this.loading.close()
     promptAction.showToast({
       message: '上报异常成功'
     })
-    router.back()
+    router.back({
+      url: 'pages/TaskDetail/TaskDetail',
+      params: {
+        addExcept: true
+      }
+    })
   }
+
+
 
   // 传入HmSelectCard组件
   @Builder
