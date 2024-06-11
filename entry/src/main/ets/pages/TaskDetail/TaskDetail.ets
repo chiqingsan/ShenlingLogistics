@@ -11,13 +11,15 @@ import {
 import { deliver, getTaskDetail, pickUp } from '../../api'
 import { Log } from '@abner/log'
 import { common } from '@kit.AbilityKit'
+import { call } from '@kit.TelephonyKit'
 
 class BaseBuilderClass {
   title: string = ""
   value: string = ""
   icon?: ResourceStr = ""
+  iconClick?: () => void = () => {
+  }
 }
-
 
 @Entry
 @Component
@@ -145,6 +147,9 @@ struct TaskDetail {
         Text(item.value).fontSize(14).fontColor($r('app.color.text_secondary'))
         if (item.icon) {
           Image(item.icon).width(24).height(24)
+            .onClick(() => {
+              item.iconClick?.()
+            })
         }
       }
     }.justifyContent(FlexAlign.SpaceBetween).width('100%').margin({
@@ -233,10 +238,14 @@ struct TaskDetail {
       title: '联系人',
       value: this.taskDetailData.startHandoverName
     })
+    // todo 模拟器无法验证打电话功能
     this.getBaseContentItem({
       title: '联系电话',
       value: this.taskDetailData.startHandoverPhone,
-      icon: $r('app.media.ic_phone')
+      icon: $r('app.media.ic_phone'),
+      iconClick: () => {
+        call.makeCall(this.taskDetailData.startHandoverPhone);
+      }
     })
     this.getBaseContentItem({
       title: '提货时间',
