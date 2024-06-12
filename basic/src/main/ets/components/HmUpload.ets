@@ -115,7 +115,10 @@ struct HmUpload {
           }
         }
       }
-      // .height(Math.ceil(this.maxNum / 3) * 105)
+      .constraintSize({
+        minHeight: 105,
+        maxHeight: Math.ceil(this.maxNum / 3) * 105
+      })
       .padding({ bottom: 20 })
       .columnsTemplate("1fr 1fr 1fr")
       .columnsGap(10)

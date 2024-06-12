@@ -238,7 +238,6 @@ struct TaskDetail {
       title: '联系人',
       value: this.taskDetailData.startHandoverName
     })
-    // todo 模拟器无法验证打电话功能
     this.getBaseContentItem({
       title: '联系电话',
       value: this.taskDetailData.startHandoverPhone,
@@ -512,32 +511,25 @@ struct TaskDetail {
           }
 
         }
+        .constraintSize({
+          minHeight: "100%"
+        })
         .padding({
           bottom: 15
         })
       }
-      .layoutWeight(1)
       .scrollBar(BarState.Off)
+      .layoutWeight(1)
 
-      this.getBottomBtn()
-    }.backgroundColor($r('app.color.background_page')).height('100%')
+      Column() {
+        this.getBottomBtn()
+      }
+    }
+    .backgroundColor($r('app.color.background_page'))
+    .height('100%')
+    .width("100%")
   }
 }
 
-@Extend(Text)
-function baseTextOneStyle() {
-  .fontSize(12)
-  .fontColor($r('app.color.white'))
-  .backgroundColor($r('app.color.text_primary'))
-  .width(22)
-  .height(22)
-  .borderRadius(11)
-  .textAlign(TextAlign.Center)
-}
-
-@Extend(Text)
-function baseTextTwoStyle() {
-  .margin({ left: 11.5 }).fontColor($r('app.color.text_secondary')).fontSize(14).lineHeight(20)
-}
 
 
